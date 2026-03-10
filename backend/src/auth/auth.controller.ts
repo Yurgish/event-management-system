@@ -12,13 +12,29 @@ import type { CookieOptions, Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import ms, { StringValue } from 'ms';
 import { AuthService } from './auth.service';
-import { LoginDto, RegisterDto } from './dto/auth.dto';
+import {
+  AuthResponseDto,
+  LoginDto,
+  LogoutResponseDto,
+  RegisterDto,
+} from './dto/auth.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtRefreshUser } from 'src/common/jwt.types';
+import {
+  ApiBody,
+  ApiConflictResponse,
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 type RefreshRequest = Request & { user: JwtRefreshUser };
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   private readonly refreshCookieName: string;
   private readonly refreshCookieMaxAge: number;
@@ -68,6 +84,14 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({ summary: 'Register new user' })
+  @ApiBody({ type: RegisterDto })
+  @ApiCreatedResponse({
+    type: AuthResponseDto,
+    description:
+      'User is registered and receives access token in response body and refresh token in httpOnly cookie.',
+  })
+  @ApiConflictResponse({ description: 'Email is already registered' })
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() dto: RegisterDto,
@@ -81,6 +105,14 @@ export class AuthController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'Login existing user' })
+  @ApiBody({ type: LoginDto })
+  @ApiOkResponse({
+    type: AuthResponseDto,
+    description:
+      'Login succeeds and returns access token. Refresh token is set as httpOnly cookie.',
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() dto: LoginDto,
@@ -95,6 +127,14 @@ export class AuthController {
 
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
+  @ApiOperation({ summary: 'Refresh access token using refresh cookie' })
+  @ApiCookieAuth('refreshToken')
+  @ApiOkResponse({
+    type: AuthResponseDto,
+    description:
+      'Returns new access token and rotates refresh token in httpOnly cookie.',
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid or expired refresh token' })
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Req() req: RefreshRequest,
@@ -112,6 +152,13 @@ export class AuthController {
 
   @Post('logout')
   @UseGuards(JwtRefreshGuard)
+  @ApiOperation({ summary: 'Logout and revoke refresh token' })
+  @ApiCookieAuth('refreshToken')
+  @ApiOkResponse({
+    type: LogoutResponseDto,
+    description: 'Refresh token is revoked in DB and cleared from cookie.',
+  })
+  @ApiUnauthorizedResponse({ description: 'Invalid or missing refresh token' })
   @HttpCode(HttpStatus.OK)
   async logout(
     @Req() req: RefreshRequest,

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { setupSwagger } from './config/swagger.config';
 
 import * as dotenv from 'dotenv';
 import * as dotenvExpand from 'dotenv-expand';
@@ -12,40 +12,23 @@ dotenvExpand.expand(myEnv);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const nodeEnv = process.env.NODE_ENV ?? 'development';
-  const isProduction = nodeEnv === 'production';
-  const swaggerEnabled =
-    (process.env.SWAGGER_ENABLED ?? (isProduction ? 'false' : 'true')) ===
-    'true';
-  const swaggerPath = process.env.SWAGGER_PATH ?? 'docs';
-  const corsOriginRaw =
-    process.env.CORS_ORIGIN ?? process.env.FRONTEND_URL ?? 'http://localhost:5173';
-  const corsOrigins = corsOriginRaw.split(',').map((origin) => origin.trim());
 
-  app.useGlobalPipes(new ValidationPipe());
-  app.use(cookieParser());
-
+  const corsOrigin = process.env.CORS_ORIGIN;
   app.enableCors({
-    origin: corsOrigins,
+    origin: corsOrigin
+      ? corsOrigin.split(',').map((origin) => origin.trim())
+      : true,
     credentials: true,
   });
 
-  if (swaggerEnabled) {
-    const swaggerConfig = new DocumentBuilder()
-      .setTitle('Event Management API')
-      .setDescription('Backend API for event management system')
-      .setVersion('1.0')
-      .addBearerAuth()
-      .build();
-
-    const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
-
-    SwaggerModule.setup(swaggerPath, app, swaggerDocument, {
-      swaggerOptions: {
-        persistAuthorization: true,
-      },
-    });
-  }
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
+  app.use(cookieParser());
+  setupSwagger(app);
 
   await app.listen(process.env.SERVER_PORT ?? 3000, () =>
     console.log(

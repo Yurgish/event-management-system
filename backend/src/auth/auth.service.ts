@@ -3,7 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { UserService } from 'src/user/user.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -18,7 +18,7 @@ export class AuthService {
   private readonly JWT_REF_TOKEN_TTL: StringValue;
 
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {
@@ -48,10 +48,7 @@ export class AuthService {
 
     const hashedRefreshToken = await hash(refreshToken, 10);
 
-    await this.prismaService.user.update({
-      where: { id: userId },
-      data: { refreshToken: hashedRefreshToken },
-    });
+    await this.userService.setRefreshTokenHash(userId, hashedRefreshToken);
 
     return { accessToken, refreshToken };
   }
@@ -59,9 +56,7 @@ export class AuthService {
   async register(dto: RegisterDto) {
     const { name, email, password } = dto;
 
-    const existingUser = await this.prismaService.user.findUnique({
-      where: { email },
-    });
+    const existingUser = await this.userService.findByEmail(email);
 
     if (existingUser) {
       throw new ConflictException('Email is already registered');
@@ -69,12 +64,10 @@ export class AuthService {
 
     const hashedPassword = await hash(password, 10);
 
-    const user = await this.prismaService.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-      },
+    const user = await this.userService.create({
+      name,
+      email,
+      password: hashedPassword,
     });
 
     return this.signTokens(user.id);
@@ -83,13 +76,7 @@ export class AuthService {
   async login(dto: LoginDto) {
     const { email, password } = dto;
 
-    const existingUser = await this.prismaService.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        password: true,
-      },
-    });
+    const existingUser = await this.userService.findByEmailWithPassword(email);
 
     if (!existingUser) {
       throw new UnauthorizedException('Invalid credentials');
@@ -105,19 +92,11 @@ export class AuthService {
   }
 
   async logout(userId: string) {
-    await this.prismaService.user.update({
-      where: { id: userId },
-      data: { refreshToken: null },
-    });
+    await this.userService.clearRefreshToken(userId);
   }
 
   async refreshTokens(userId: string, refreshToken: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: { id: userId },
-      select: {
-        refreshToken: true,
-      },
-    });
+    const user = await this.userService.findRefreshHashById(userId);
 
     if (!user || !user.refreshToken) {
       throw new UnauthorizedException('User not found or no refresh token');
