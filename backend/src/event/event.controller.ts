@@ -20,13 +20,14 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { EventService } from './event.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { ListEventsQueryDto } from './dto/list-events-query.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import type { JwtUser } from 'src/common/jwt.types';
+
+import { Auth } from '@/auth/decorators/auth.decorator';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import type { JwtUser } from '@/common/jwt.types';
+import { CreateEventDto } from '@/event/dto/create-event.dto';
+import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
+import { UpdateEventDto } from '@/event/dto/update-event.dto';
+import { EventService } from '@/event/event.service';
 
 @ApiTags('Events')
 @Controller('events')

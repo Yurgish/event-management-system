@@ -5,10 +5,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserService } from './user.service';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import type { JwtUser } from 'src/common/jwt.types';
+
+import { Auth } from '@/auth/decorators/auth.decorator';
+import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import type { JwtUser } from '@/common/jwt.types';
+import { UserService } from '@/user/user.service';
 
 @ApiTags('Users')
 @Controller('users')

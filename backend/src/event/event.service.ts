@@ -5,14 +5,15 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateEventDto } from './dto/create-event.dto';
-import { ListEventsQueryDto } from './dto/list-events-query.dto';
-import { UpdateEventDto } from './dto/update-event.dto';
+
 import {
   buildPaginatedResult,
   getPaginationParams,
-} from 'src/common/utils/pagination.util';
+} from '@/common/utils/pagination.util';
+import { CreateEventDto } from '@/event/dto/create-event.dto';
+import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
+import { UpdateEventDto } from '@/event/dto/update-event.dto';
+import { PrismaService } from '@/prisma/prisma.service';
 
 const EVENT_SELECT = {
   id: true,

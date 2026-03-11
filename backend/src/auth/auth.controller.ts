@@ -8,18 +8,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import type { CookieOptions, Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import ms, { StringValue } from 'ms';
-import { AuthService } from './auth.service';
-import {
-  AuthResponseDto,
-  LoginDto,
-  LogoutResponseDto,
-  RegisterDto,
-} from './dto/auth.dto';
-import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
-import { JwtRefreshUser } from 'src/common/jwt.types';
 import {
   ApiBody,
   ApiConflictResponse,
@@ -30,6 +19,18 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import type { CookieOptions, Request, Response } from 'express';
+import ms, { StringValue } from 'ms';
+
+import { AuthService } from '@/auth/auth.service';
+import {
+  AuthResponseDto,
+  LoginDto,
+  LogoutResponseDto,
+  RegisterDto,
+} from '@/auth/dto/auth.dto';
+import { JwtRefreshGuard } from '@/auth/guards/jwt-refresh.guard';
+import { JwtRefreshUser } from '@/common/jwt.types';
 
 type RefreshRequest = Request & { user: JwtRefreshUser };
 

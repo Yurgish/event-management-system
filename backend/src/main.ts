@@ -1,11 +1,11 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { setupSwagger } from './config/swagger.config';
-
+import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as dotenvExpand from 'dotenv-expand';
-import cookieParser from 'cookie-parser';
+
+import { AppModule } from '@/app.module';
+import { setupSwagger } from '@/config/swagger.config';
 
 const myEnv = dotenv.config();
 dotenvExpand.expand(myEnv);
