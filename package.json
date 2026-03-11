@@ -1,0 +1,17 @@
+{
+  "name": "event-management-system",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev:db && concurrently -k -n backend,frontend \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:backend": "npm --prefix backend run start:dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:db": "docker compose -f docker-compose.dev.yml up -d",
+    "dev:down": "docker compose -f docker-compose.dev.yml down",
+    "stack:start": "docker compose up",
+    "stack:up": "docker compose up --build",
+    "stack:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
