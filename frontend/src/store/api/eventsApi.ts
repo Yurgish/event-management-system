@@ -76,22 +76,14 @@ export const eventsApi = baseApi.injectEndpoints({
         url: `/events/${id}/join`,
         method: 'POST',
       }),
-      invalidatesTags: (_, __, id) => [
-        { type: 'Event', id },
-        { type: 'Event', id: 'LIST' },
-        'MyEvents',
-      ],
+      invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],
     }),
     leaveEvent: builder.mutation<SuccessResponse, string>({
       query: (id) => ({
         url: `/events/${id}/leave`,
         method: 'POST',
       }),
-      invalidatesTags: (_, __, id) => [
-        { type: 'Event', id },
-        { type: 'Event', id: 'LIST' },
-        'MyEvents',
-      ],
+      invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],
     }),
   }),
 });

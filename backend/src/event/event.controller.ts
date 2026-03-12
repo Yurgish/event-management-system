@@ -23,7 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Auth } from '@/auth/decorators/auth.decorator';
+import { Auth, OptionalAuth } from '@/auth/decorators/auth.decorator';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { SuccessResponseDto } from '@/common/dto/success-response.dto';
 import type { JwtUser } from '@/common/jwt.types';
@@ -44,13 +44,14 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get()
+  @OptionalAuth()
   @ApiOperation({ summary: 'Get public events with pagination and search' })
   @ApiOkResponse({
     description: 'Paginated list of public events with participant count.',
     type: PaginatedEventsResponseDto,
   })
-  findAll(@Query() query: ListEventsQueryDto) {
-    return this.eventService.findAllPublic(query);
+  findAll(@Query() query: ListEventsQueryDto, @CurrentUser() user?: JwtUser) {
+    return this.eventService.findAllPublic(query, user?.id);
   }
 
   @Get(':id')

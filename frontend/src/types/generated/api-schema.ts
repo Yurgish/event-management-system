@@ -4,779 +4,783 @@
  */
 
 export interface paths {
-    "/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get public events with pagination and search */
-        get: operations["EventController_findAll"];
-        put?: never;
-        /** Create new event */
-        post: operations["EventController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/events': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/events/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get event by id */
-        get: operations["EventController_findOne"];
-        put?: never;
-        post?: never;
-        /** Delete event (organizer only) */
-        delete: operations["EventController_remove"];
-        options?: never;
-        head?: never;
-        /** Edit event (organizer only) */
-        patch: operations["EventController_update"];
-        trace?: never;
+    /** Get public events with pagination and search */
+    get: operations['EventController_findAll'];
+    put?: never;
+    /** Create new event */
+    post: operations['EventController_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/events/{id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/events/{id}/join": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Join event */
-        post: operations["EventController_join"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** Get event by id */
+    get: operations['EventController_findOne'];
+    put?: never;
+    post?: never;
+    /** Delete event (organizer only) */
+    delete: operations['EventController_remove'];
+    options?: never;
+    head?: never;
+    /** Edit event (organizer only) */
+    patch: operations['EventController_update'];
+    trace?: never;
+  };
+  '/events/{id}/join': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/events/{id}/leave": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Leave event */
-        post: operations["EventController_leave"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Join event */
+    post: operations['EventController_join'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/events/{id}/leave': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Register new user */
-        post: operations["AuthController_register"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Leave event */
+    post: operations['EventController_leave'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/register': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/login": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Login existing user */
-        post: operations["AuthController_login"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Register new user */
+    post: operations['AuthController_register'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/login': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/refresh": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Refresh access token using refresh cookie */
-        post: operations["AuthController_refresh"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Login existing user */
+    post: operations['AuthController_login'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/refresh': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/auth/logout": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Logout and revoke refresh token */
-        post: operations["AuthController_logout"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Refresh access token using refresh cookie */
+    post: operations['AuthController_refresh'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/auth/logout': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/users/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get current user profile */
-        get: operations["UserController_getMe"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /** Logout and revoke refresh token */
+    post: operations['AuthController_logout'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users/me': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/users/me/events": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get current user events (organized + joined) for calendar */
-        get: operations["UserController_myEvents"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /** Get current user profile */
+    get: operations['UserController_getMe'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/users/me/events': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    /** Get current user events (organized + joined) for calendar */
+    get: operations['UserController_myEvents'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        EventUserSummaryDto: {
-            /** @example cm8xabcd1234 */
-            id: string;
-            /** @example John Doe */
-            name: string;
-        };
-        EventCountDto: {
-            /** @example 12 */
-            participants: number;
-        };
-        EventSummaryDto: {
-            /** @example cm8xabcd1234 */
-            id: string;
-            /** @example NestJS Workshop */
-            title: string;
-            /** @example A deep dive into NestJS framework */
-            description: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-15T14:00:00.000Z
-             */
-            dateTime: string;
-            /** @example Kyiv, Ukraine */
-            location: string;
-            /** @example 50 */
-            capacity?: Record<string, never> | null;
-            /** @example true */
-            isPublic: boolean;
-            /**
-             * Format: date-time
-             * @example 2026-06-01T09:00:00.000Z
-             */
-            createdAt: string;
-            /** @example cm8xorganizer1234 */
-            organizerId: string;
-            organizer: components["schemas"]["EventUserSummaryDto"];
-            _count: components["schemas"]["EventCountDto"];
-        };
-        PaginationMetaDto: {
-            /** @example 1 */
-            page: number;
-            /** @example 10 */
-            limit: number;
-            /** @example 42 */
-            total: number;
-            /** @example 5 */
-            totalPages: number;
-        };
-        PaginatedEventsResponseDto: {
-            items: components["schemas"]["EventSummaryDto"][];
-            meta: components["schemas"]["PaginationMetaDto"];
-        };
-        EventParticipantDto: {
-            /** @example cm8xparticipant123 */
-            userId: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-10T10:00:00.000Z
-             */
-            joinedAt: string;
-            user: components["schemas"]["EventUserSummaryDto"];
-        };
-        EventResponseDto: {
-            /** @example cm8xabcd1234 */
-            id: string;
-            /** @example NestJS Workshop */
-            title: string;
-            /** @example A deep dive into NestJS framework */
-            description: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-15T14:00:00.000Z
-             */
-            dateTime: string;
-            /** @example Kyiv, Ukraine */
-            location: string;
-            /** @example 50 */
-            capacity?: Record<string, never> | null;
-            /** @example true */
-            isPublic: boolean;
-            /**
-             * Format: date-time
-             * @example 2026-06-01T09:00:00.000Z
-             */
-            createdAt: string;
-            /** @example cm8xorganizer1234 */
-            organizerId: string;
-            organizer: components["schemas"]["EventUserSummaryDto"];
-            _count: components["schemas"]["EventCountDto"];
-            participants: components["schemas"]["EventParticipantDto"][];
-        };
-        CreateEventDto: {
-            /** @example NestJS Workshop */
-            title: string;
-            /** @example A deep dive into NestJS framework */
-            description: string;
-            /** @example 2026-06-15T14:00:00.000Z */
-            dateTime: string;
-            /** @example Kyiv, Ukraine */
-            location: string;
-            /** @example 50 */
-            capacity?: number;
-            /**
-             * @default true
-             * @example true
-             */
-            isPublic: boolean;
-        };
-        UpdateEventDto: {
-            /** @example NestJS Workshop */
-            title?: string;
-            /** @example A deep dive into NestJS framework */
-            description?: string;
-            /** @example 2026-06-15T14:00:00.000Z */
-            dateTime?: string;
-            /** @example Kyiv, Ukraine */
-            location?: string;
-            /** @example 50 */
-            capacity?: number;
-            /**
-             * @default true
-             * @example true
-             */
-            isPublic: boolean;
-        };
-        ParticipantRecordDto: {
-            /** @example cm8xabcd1234 */
-            eventId: string;
-            /** @example cm8xuser1234 */
-            userId: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-10T10:00:00.000Z
-             */
-            joinedAt: string;
-        };
-        SuccessResponseDto: {
-            /** @example true */
-            success: boolean;
-        };
-        RegisterDto: {
-            /** @example John Doe */
-            name: string;
-            /** @example john@example.com */
-            email: string;
-            /** @example StrongPass123 */
-            password: string;
-        };
-        AuthResponseDto: {
-            /**
-             * @description Short-lived JWT access token
-             * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access-token-signature.example
-             */
-            accessToken: string;
-        };
-        LoginDto: {
-            /** @example john@example.com */
-            email: string;
-            /** @example StrongPass123 */
-            password: string;
-        };
-        LogoutResponseDto: {
-            /** @example true */
-            success: boolean;
-        };
-        UserResponseDto: {
-            /** @example cm123abc */
-            id: string;
-            /** @example John Doe */
-            name: string;
-            /** @example john@example.com */
-            email: string;
-        };
-        UserEventCalendarItemDto: {
-            /** @example cm8xabcd1234 */
-            id: string;
-            /** @example NestJS Workshop */
-            title: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-15T14:00:00.000Z
-             */
-            dateTime: string;
-            /** @example Kyiv, Ukraine */
-            location: string;
-        };
-        JoinedEventCalendarItemDto: {
-            /** @example cm8xabcd1234 */
-            id: string;
-            /** @example NestJS Workshop */
-            title: string;
-            /**
-             * Format: date-time
-             * @example 2026-06-15T14:00:00.000Z
-             */
-            dateTime: string;
-            /** @example Kyiv, Ukraine */
-            location: string;
-            /** @example cm8xorganizer1234 */
-            organizerId: string;
-        };
-        ParticipationResponseDto: {
-            /**
-             * Format: date-time
-             * @example 2026-06-10T10:00:00.000Z
-             */
-            joinedAt: string;
-            event: components["schemas"]["JoinedEventCalendarItemDto"];
-        };
-        MyEventsResponseDto: {
-            organizedEvents: components["schemas"]["UserEventCalendarItemDto"][];
-            participations: components["schemas"]["ParticipationResponseDto"][];
-        };
+  schemas: {
+    EventUserSummaryDto: {
+      /** @example cm8xabcd1234 */
+      id: string;
+      /** @example John Doe */
+      name: string;
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    EventCountDto: {
+      /** @example 12 */
+      participants: number;
+    };
+    EventSummaryDto: {
+      /** @example cm8xabcd1234 */
+      id: string;
+      /** @example false */
+      isJoined?: boolean;
+      /** @example NestJS Workshop */
+      title: string;
+      /** @example A deep dive into NestJS framework */
+      description: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-15T14:00:00.000Z
+       */
+      dateTime: string;
+      /** @example Kyiv, Ukraine */
+      location: string;
+      /** @example 50 */
+      capacity?: Record<string, never> | null;
+      /** @example true */
+      isPublic: boolean;
+      /**
+       * Format: date-time
+       * @example 2026-06-01T09:00:00.000Z
+       */
+      createdAt: string;
+      /** @example cm8xorganizer1234 */
+      organizerId: string;
+      organizer: components['schemas']['EventUserSummaryDto'];
+      _count: components['schemas']['EventCountDto'];
+    };
+    PaginationMetaDto: {
+      /** @example 1 */
+      page: number;
+      /** @example 10 */
+      limit: number;
+      /** @example 42 */
+      total: number;
+      /** @example 5 */
+      totalPages: number;
+    };
+    PaginatedEventsResponseDto: {
+      items: components['schemas']['EventSummaryDto'][];
+      meta: components['schemas']['PaginationMetaDto'];
+    };
+    EventParticipantDto: {
+      /** @example cm8xparticipant123 */
+      userId: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-10T10:00:00.000Z
+       */
+      joinedAt: string;
+      user: components['schemas']['EventUserSummaryDto'];
+    };
+    EventResponseDto: {
+      /** @example cm8xabcd1234 */
+      id: string;
+      /** @example false */
+      isJoined?: boolean;
+      /** @example NestJS Workshop */
+      title: string;
+      /** @example A deep dive into NestJS framework */
+      description: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-15T14:00:00.000Z
+       */
+      dateTime: string;
+      /** @example Kyiv, Ukraine */
+      location: string;
+      /** @example 50 */
+      capacity?: Record<string, never> | null;
+      /** @example true */
+      isPublic: boolean;
+      /**
+       * Format: date-time
+       * @example 2026-06-01T09:00:00.000Z
+       */
+      createdAt: string;
+      /** @example cm8xorganizer1234 */
+      organizerId: string;
+      organizer: components['schemas']['EventUserSummaryDto'];
+      _count: components['schemas']['EventCountDto'];
+      participants: components['schemas']['EventParticipantDto'][];
+    };
+    CreateEventDto: {
+      /** @example NestJS Workshop */
+      title: string;
+      /** @example A deep dive into NestJS framework */
+      description: string;
+      /** @example 2026-06-15T14:00:00.000Z */
+      dateTime: string;
+      /** @example Kyiv, Ukraine */
+      location: string;
+      /** @example 50 */
+      capacity?: number;
+      /**
+       * @default true
+       * @example true
+       */
+      isPublic: boolean;
+    };
+    UpdateEventDto: {
+      /** @example NestJS Workshop */
+      title?: string;
+      /** @example A deep dive into NestJS framework */
+      description?: string;
+      /** @example 2026-06-15T14:00:00.000Z */
+      dateTime?: string;
+      /** @example Kyiv, Ukraine */
+      location?: string;
+      /** @example 50 */
+      capacity?: number;
+      /**
+       * @default true
+       * @example true
+       */
+      isPublic: boolean;
+    };
+    ParticipantRecordDto: {
+      /** @example cm8xabcd1234 */
+      eventId: string;
+      /** @example cm8xuser1234 */
+      userId: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-10T10:00:00.000Z
+       */
+      joinedAt: string;
+    };
+    SuccessResponseDto: {
+      /** @example true */
+      success: boolean;
+    };
+    RegisterDto: {
+      /** @example John Doe */
+      name: string;
+      /** @example john@example.com */
+      email: string;
+      /** @example StrongPass123 */
+      password: string;
+    };
+    AuthResponseDto: {
+      /**
+       * @description Short-lived JWT access token
+       * @example eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access-token-signature.example
+       */
+      accessToken: string;
+    };
+    LoginDto: {
+      /** @example john@example.com */
+      email: string;
+      /** @example StrongPass123 */
+      password: string;
+    };
+    LogoutResponseDto: {
+      /** @example true */
+      success: boolean;
+    };
+    UserResponseDto: {
+      /** @example cm123abc */
+      id: string;
+      /** @example John Doe */
+      name: string;
+      /** @example john@example.com */
+      email: string;
+    };
+    UserEventCalendarItemDto: {
+      /** @example cm8xabcd1234 */
+      id: string;
+      /** @example NestJS Workshop */
+      title: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-15T14:00:00.000Z
+       */
+      dateTime: string;
+      /** @example Kyiv, Ukraine */
+      location: string;
+    };
+    JoinedEventCalendarItemDto: {
+      /** @example cm8xabcd1234 */
+      id: string;
+      /** @example NestJS Workshop */
+      title: string;
+      /**
+       * Format: date-time
+       * @example 2026-06-15T14:00:00.000Z
+       */
+      dateTime: string;
+      /** @example Kyiv, Ukraine */
+      location: string;
+      /** @example cm8xorganizer1234 */
+      organizerId: string;
+    };
+    ParticipationResponseDto: {
+      /**
+       * Format: date-time
+       * @example 2026-06-10T10:00:00.000Z
+       */
+      joinedAt: string;
+      event: components['schemas']['JoinedEventCalendarItemDto'];
+    };
+    MyEventsResponseDto: {
+      organizedEvents: components['schemas']['UserEventCalendarItemDto'][];
+      participations: components['schemas']['ParticipationResponseDto'][];
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    EventController_findAll: {
-        parameters: {
-            query?: {
-                /** @description Page number (starts from 1) */
-                page?: number;
-                /** @description Items per page */
-                limit?: number;
-                /** @description Search by title, description or location */
-                search?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Paginated list of public events with participant count. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedEventsResponseDto"];
-                };
-            };
-        };
+  EventController_findAll: {
+    parameters: {
+      query?: {
+        /** @description Page number (starts from 1) */
+        page?: number;
+        /** @description Items per page */
+        limit?: number;
+        /** @description Search by title, description or location */
+        search?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    EventController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Paginated list of public events with participant count. */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateEventDto"];
-            };
+        content: {
+          'application/json': components['schemas']['PaginatedEventsResponseDto'];
         };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventSummaryDto"];
-                };
-            };
-        };
+      };
     };
-    EventController_findOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventResponseDto"];
-                };
-            };
-            /** @description Event not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  EventController_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    EventController_remove: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Event deleted successfully */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Only the organizer can delete this event */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Event not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateEventDto'];
+      };
     };
-    EventController_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateEventDto"];
-            };
+        content: {
+          'application/json': components['schemas']['EventSummaryDto'];
         };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["EventSummaryDto"];
-                };
-            };
-            /** @description Only the organizer can edit this event */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Event not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+      };
     };
-    EventController_join: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ParticipantRecordDto"];
-                };
-            };
-            /** @description Already joined */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  EventController_findOne: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
     };
-    EventController_leave: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponseDto"];
-                };
-            };
-            /** @description Not a participant */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          'application/json': components['schemas']['EventResponseDto'];
         };
+      };
+      /** @description Event not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    AuthController_register: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RegisterDto"];
-            };
-        };
-        responses: {
-            /** @description User is registered and receives access token in response body and refresh token in httpOnly cookie. */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponseDto"];
-                };
-            };
-            /** @description Email is already registered */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  EventController_remove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
     };
-    AuthController_login: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Event deleted successfully */
+      204: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["LoginDto"];
-            };
+        content?: never;
+      };
+      /** @description Only the organizer can delete this event */
+      403: {
+        headers: {
+          [name: string]: unknown;
         };
-        responses: {
-            /** @description Login succeeds and returns access token. Refresh token is set as httpOnly cookie. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponseDto"];
-                };
-            };
-            /** @description Invalid credentials */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content?: never;
+      };
+      /** @description Event not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
         };
+        content?: never;
+      };
     };
-    AuthController_refresh: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Returns new access token and rotates refresh token in httpOnly cookie. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AuthResponseDto"];
-                };
-            };
-            /** @description Invalid or expired refresh token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  EventController_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
     };
-    AuthController_logout: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Refresh token is revoked in DB and cleared from cookie. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["LogoutResponseDto"];
-                };
-            };
-            /** @description Invalid or missing refresh token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateEventDto'];
+      };
     };
-    UserController_getMe: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UserResponseDto"];
-                };
-            };
-            /** @description User not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
+        content: {
+          'application/json': components['schemas']['EventSummaryDto'];
         };
+      };
+      /** @description Only the organizer can edit this event */
+      403: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Event not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
     };
-    UserController_myEvents: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Object with organizedEvents and participations arrays. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MyEventsResponseDto"];
-                };
-            };
-            /** @description User not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
+  };
+  EventController_join: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
     };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ParticipantRecordDto'];
+        };
+      };
+      /** @description Already joined */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  EventController_leave: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SuccessResponseDto'];
+        };
+      };
+      /** @description Not a participant */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_register: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RegisterDto'];
+      };
+    };
+    responses: {
+      /** @description User is registered and receives access token in response body and refresh token in httpOnly cookie. */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AuthResponseDto'];
+        };
+      };
+      /** @description Email is already registered */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_login: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['LoginDto'];
+      };
+    };
+    responses: {
+      /** @description Login succeeds and returns access token. Refresh token is set as httpOnly cookie. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AuthResponseDto'];
+        };
+      };
+      /** @description Invalid credentials */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_refresh: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Returns new access token and rotates refresh token in httpOnly cookie. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['AuthResponseDto'];
+        };
+      };
+      /** @description Invalid or expired refresh token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AuthController_logout: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Refresh token is revoked in DB and cleared from cookie. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['LogoutResponseDto'];
+        };
+      };
+      /** @description Invalid or missing refresh token */
+      401: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UserController_getMe: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['UserResponseDto'];
+        };
+      };
+      /** @description User not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UserController_myEvents: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Object with organizedEvents and participations arrays. */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MyEventsResponseDto'];
+        };
+      };
+      /** @description User not found */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
 }

@@ -7,6 +7,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MaxLength,
   Min,
 } from 'class-validator';
 
@@ -16,9 +17,13 @@ export class CreateEventDto {
   @IsString()
   title: string;
 
-  @ApiProperty({ example: 'A deep dive into NestJS framework' })
+  @ApiProperty({
+    example: 'A deep dive into NestJS framework',
+    maxLength: 200,
+  })
   @IsNotEmpty()
   @IsString()
+  @MaxLength(200)
   description: string;
 
   @ApiProperty({ example: '2026-06-15T14:00:00.000Z' })

@@ -78,7 +78,7 @@ export class EventService {
     };
   }
 
-  async findAllPublic(query: ListEventsQueryDto) {
+  async findAllPublic(query: ListEventsQueryDto, userId?: string) {
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     const { skip, take } = getPaginationParams(page, limit);
@@ -95,7 +95,22 @@ export class EventService {
       this.prismaService.event.count({ where }),
     ]);
 
-    return buildPaginatedResult(items, total, page, limit);
+    let joinedIds = new Set<string>();
+
+    if (userId && items.length > 0) {
+      const participations = await this.prismaService.participant.findMany({
+        where: { userId, eventId: { in: items.map((i) => i.id) } },
+        select: { eventId: true },
+      });
+      joinedIds = new Set(participations.map((p) => p.eventId));
+    }
+
+    const itemsWithIsJoined = items.map((item) => ({
+      ...item,
+      isJoined: joinedIds.has(item.id),
+    }));
+
+    return buildPaginatedResult(itemsWithIsJoined, total, page, limit);
   }
 
   async findOne(id: string) {

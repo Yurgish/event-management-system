@@ -1,14 +1,16 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import AppLayout from '@/components/layout/AppLayout';
-import AuthLayout from '@/components/layout/AuthLayout';
-import CreateEventPage from '@/pages/CreateEventPage';
-import EditEventPage from '@/pages/EditEventPage';
-import EventsPage from '@/pages/EventsPage';
-import LoginPage from '@/pages/LoginPage';
-import MyEventsPage from '@/pages/MyEventsPage';
-import NotFoundPage from '@/pages/NotFoundPage';
-import RegisterPage from '@/pages/RegisterPage';
+import { AppLayout, AuthLayout } from '@/components/layout';
+import {
+  CreateEventPage,
+  EditEventPage,
+  EventDetailsPage,
+  EventsPage,
+  LoginPage,
+  MyEventsPage,
+  NotFoundPage,
+  RegisterPage,
+} from '@/pages';
 import { ProtectedRoutes } from '@/router/guards';
 
 export const router = createBrowserRouter([
@@ -23,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: 'events',
         element: <EventsPage />,
+      },
+      {
+        path: 'events/:id',
+        element: <EventDetailsPage />,
       },
       {
         element: <ProtectedRoutes />,

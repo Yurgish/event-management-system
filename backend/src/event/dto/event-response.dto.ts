@@ -11,6 +11,9 @@ export class EventSummaryDto {
   @ApiProperty({ example: 'cm8xabcd1234' })
   id: string;
 
+  @ApiPropertyOptional({ example: false })
+  isJoined?: boolean;
+
   @ApiProperty({ example: 'NestJS Workshop' })
   title: string;
 
