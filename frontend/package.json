@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "types:generate": "openapi-typescript http://localhost:3000/docs-json -o src/types/generated/api-schema.ts"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.20",
@@ -19,6 +20,7 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@tailwindcss/vite": "^4.2.1",
     "dayjs": "^1.11.19",
+    "event-management-system": "file:..",
     "lucide-react": "^0.577.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -39,6 +41,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.5.0",
+    "openapi-typescript": "^7.10.1",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "typescript": "~5.9.3",
