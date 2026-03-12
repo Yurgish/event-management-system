@@ -29,7 +29,7 @@ import {
   LogoutResponseDto,
   RegisterDto,
 } from '@/auth/dto/auth.dto';
-import { JwtRefreshGuard } from '@/auth/guards/jwt-refresh.guard';
+import { JwtRefreshGuard } from '@/auth/guards';
 import { JwtRefreshUser } from '@/common/jwt.types';
 
 type RefreshRequest = Request & { user: JwtRefreshUser };

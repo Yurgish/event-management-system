@@ -10,9 +10,11 @@ import {
   buildPaginatedResult,
   getPaginationParams,
 } from '@/common/utils/pagination.util';
-import { CreateEventDto } from '@/event/dto/create-event.dto';
-import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
-import { UpdateEventDto } from '@/event/dto/update-event.dto';
+import {
+  CreateEventDto,
+  ListEventsQueryDto,
+  UpdateEventDto,
+} from '@/event/dto';
 import { PrismaService } from '@/prisma/prisma.service';
 
 /** Used for list, create, update — no participant list, only count. */

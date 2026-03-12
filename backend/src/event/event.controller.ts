@@ -27,15 +27,15 @@ import { Auth } from '@/auth/decorators/auth.decorator';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import { SuccessResponseDto } from '@/common/dto/success-response.dto';
 import type { JwtUser } from '@/common/jwt.types';
-import { CreateEventDto } from '@/event/dto/create-event.dto';
 import {
+  CreateEventDto,
   EventResponseDto,
   EventSummaryDto,
+  ListEventsQueryDto,
   PaginatedEventsResponseDto,
-} from '@/event/dto/event-response.dto';
-import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
-import { ParticipantRecordDto } from '@/event/dto/participant-record.dto';
-import { UpdateEventDto } from '@/event/dto/update-event.dto';
+  ParticipantRecordDto,
+  UpdateEventDto,
+} from '@/event/dto';
 import { EventService } from '@/event/event.service';
 
 @ApiTags('Events')

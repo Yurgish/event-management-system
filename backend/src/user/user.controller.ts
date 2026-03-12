@@ -10,7 +10,7 @@ import {
 import { Auth } from '@/auth/decorators/auth.decorator';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import type { JwtUser } from '@/common/jwt.types';
-import { MyEventsResponseDto } from '@/user/dto/my-events-response.dto';
+import { MyEventsResponseDto } from '@/user/dto';
 import { UserService } from '@/user/user.service';
 
 @ApiTags('Users')
