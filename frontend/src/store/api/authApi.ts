@@ -53,7 +53,7 @@ export const authApi = baseApi.injectEndpoints({
         await queryFulfilled;
         dispatch(clearCredentials());
       },
-      invalidatesTags: ['Auth', 'MyEvents'],
+      invalidatesTags: ['Auth', 'MyEvents', 'User'],
     }),
   }),
 });

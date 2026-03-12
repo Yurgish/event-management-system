@@ -143,6 +143,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/users/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get current user profile */
+        get: operations["UserController_getMe"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me/events": {
         parameters: {
             query?: never;
@@ -328,6 +345,14 @@ export interface components {
         LogoutResponseDto: {
             /** @example true */
             success: boolean;
+        };
+        UserResponseDto: {
+            /** @example cm123abc */
+            id: string;
+            /** @example John Doe */
+            name: string;
+            /** @example john@example.com */
+            email: string;
         };
         UserEventCalendarItemDto: {
             /** @example cm8xabcd1234 */
@@ -694,6 +719,32 @@ export interface operations {
             };
             /** @description Invalid or missing refresh token */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UserController_getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"];
+                };
+            };
+            /** @description User not found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

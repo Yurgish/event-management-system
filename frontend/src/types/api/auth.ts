@@ -4,3 +4,4 @@ export type RegisterRequest = components['schemas']['RegisterDto'];
 export type LoginRequest = components['schemas']['LoginDto'];
 export type AuthResponse = components['schemas']['AuthResponseDto'];
 export type LogoutResponse = components['schemas']['LogoutResponseDto'];
+export type UserInfo = components['schemas']['UserResponseDto'];

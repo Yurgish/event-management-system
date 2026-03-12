@@ -24,6 +24,13 @@ export class UserService {
     });
   }
 
+  findMe(id: string) {
+    return this.prismaService.user.findUnique({
+      where: { id },
+      select: { id: true, name: true, email: true },
+    });
+  }
+
   create(data: { name: string; email: string; password: string }) {
     return this.prismaService.user.create({ data });
   }
