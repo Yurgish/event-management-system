@@ -19,7 +19,7 @@ export const authApi = baseApi.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(setCredentials(data));
       },
-      invalidatesTags: ['Auth'],
+      invalidatesTags: ['Auth', 'User', 'MyEvents'],
     }),
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (body) => ({
@@ -31,7 +31,7 @@ export const authApi = baseApi.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(setCredentials(data));
       },
-      invalidatesTags: ['Auth'],
+      invalidatesTags: ['Auth', 'User', 'MyEvents'],
     }),
     refresh: builder.mutation<AuthResponse, void>({
       query: () => ({
@@ -42,7 +42,7 @@ export const authApi = baseApi.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(setCredentials(data));
       },
-      invalidatesTags: ['Auth'],
+      invalidatesTags: ['Auth', 'User', 'MyEvents'],
     }),
     logout: builder.mutation<LogoutResponse, void>({
       query: () => ({
@@ -50,8 +50,12 @@ export const authApi = baseApi.injectEndpoints({
         method: 'POST',
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
-        await queryFulfilled;
-        dispatch(clearCredentials());
+        try {
+          await queryFulfilled;
+        } finally {
+          dispatch(clearCredentials());
+          dispatch(baseApi.util.resetApiState());
+        }
       },
       invalidatesTags: ['Auth', 'MyEvents', 'User'],
     }),

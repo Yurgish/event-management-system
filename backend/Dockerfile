@@ -25,4 +25,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/generated ./generated
 
 EXPOSE 3000
-CMD ["sh", "-c", "export DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public && npx prisma migrate deploy && node dist/src/main.js"]
+CMD ["sh", "-c", "export DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public && npx prisma migrate deploy && if [ \"$RUN_DB_SEED\" = \"true\" ]; then node dist/prisma/seed.js; fi && node dist/src/main.js"]

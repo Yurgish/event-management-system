@@ -48,6 +48,7 @@ const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(clearCredentials());
+      api.dispatch(baseApi.util.resetApiState());
     }
   }
 

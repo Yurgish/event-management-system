@@ -79,7 +79,9 @@ const Header = () => {
   const isAuthPage = isLoginPage || pathname === '/register';
 
   const handleLogout = () => {
-    logout().finally(() => navigate('/login', { replace: true }));
+    logout().finally(() => {
+      navigate('/login', { replace: true });
+    });
   };
 
   return (
