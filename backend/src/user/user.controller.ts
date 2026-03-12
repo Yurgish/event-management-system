@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
@@ -9,6 +10,7 @@ import {
 import { Auth } from '@/auth/decorators/auth.decorator';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
 import type { JwtUser } from '@/common/jwt.types';
+import { MyEventsResponseDto } from '@/user/dto/my-events-response.dto';
 import { UserService } from '@/user/user.service';
 
 @ApiTags('Users')
@@ -24,7 +26,9 @@ export class UserController {
   })
   @ApiOkResponse({
     description: 'Object with organizedEvents and participations arrays.',
+    type: MyEventsResponseDto,
   })
+  @ApiNotFoundResponse({ description: 'User not found' })
   myEvents(@CurrentUser() user: JwtUser) {
     return this.userService.findMyEvents(user.id);
   }

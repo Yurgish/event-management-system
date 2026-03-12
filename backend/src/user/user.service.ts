@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -42,8 +42,8 @@ export class UserService {
     });
   }
 
-  findMyEvents(userId: string) {
-    return this.prismaService.user.findUnique({
+  async findMyEvents(userId: string) {
+    const user = await this.prismaService.user.findUnique({
       where: { id: userId },
       select: {
         organizedEvents: {
@@ -52,9 +52,6 @@ export class UserService {
             title: true,
             dateTime: true,
             location: true,
-            capacity: true,
-            isPublic: true,
-            _count: { select: { participants: true } },
           },
           orderBy: { dateTime: 'asc' },
         },
@@ -67,10 +64,7 @@ export class UserService {
                 title: true,
                 dateTime: true,
                 location: true,
-                capacity: true,
-                isPublic: true,
                 organizerId: true,
-                _count: { select: { participants: true } },
               },
             },
           },
@@ -78,5 +72,11 @@ export class UserService {
         },
       },
     });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 }

@@ -13,7 +13,9 @@ import {
 import {
   ApiBearerAuth,
   ApiConflictResponse,
+  ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -23,9 +25,16 @@ import {
 
 import { Auth } from '@/auth/decorators/auth.decorator';
 import { CurrentUser } from '@/common/decorators/current-user.decorator';
+import { SuccessResponseDto } from '@/common/dto/success-response.dto';
 import type { JwtUser } from '@/common/jwt.types';
 import { CreateEventDto } from '@/event/dto/create-event.dto';
+import {
+  EventResponseDto,
+  EventSummaryDto,
+  PaginatedEventsResponseDto,
+} from '@/event/dto/event-response.dto';
 import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
+import { ParticipantRecordDto } from '@/event/dto/participant-record.dto';
 import { UpdateEventDto } from '@/event/dto/update-event.dto';
 import { EventService } from '@/event/event.service';
 
@@ -38,6 +47,7 @@ export class EventController {
   @ApiOperation({ summary: 'Get public events with pagination and search' })
   @ApiOkResponse({
     description: 'Paginated list of public events with participant count.',
+    type: PaginatedEventsResponseDto,
   })
   findAll(@Query() query: ListEventsQueryDto) {
     return this.eventService.findAllPublic(query);
@@ -46,6 +56,7 @@ export class EventController {
   @Get(':id')
   @ApiOperation({ summary: 'Get event by id' })
   @ApiParam({ name: 'id', example: 'cm8xabcd1234' })
+  @ApiOkResponse({ type: EventResponseDto })
   @ApiNotFoundResponse({ description: 'Event not found' })
   findOne(@Param('id') id: string) {
     return this.eventService.findOne(id);
@@ -55,6 +66,7 @@ export class EventController {
   @Auth()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new event' })
+  @ApiCreatedResponse({ type: EventSummaryDto })
   @HttpCode(HttpStatus.CREATED)
   create(@CurrentUser() user: JwtUser, @Body() dto: CreateEventDto) {
     return this.eventService.create(user.id, dto);
@@ -68,6 +80,7 @@ export class EventController {
   @ApiForbiddenResponse({
     description: 'Only the organizer can edit this event',
   })
+  @ApiOkResponse({ type: EventSummaryDto })
   @ApiNotFoundResponse({ description: 'Event not found' })
   update(
     @Param('id') id: string,
@@ -86,6 +99,7 @@ export class EventController {
     description: 'Only the organizer can delete this event',
   })
   @ApiNotFoundResponse({ description: 'Event not found' })
+  @ApiNoContentResponse({ description: 'Event deleted successfully' })
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string, @CurrentUser() user: JwtUser) {
     return this.eventService.remove(id, user.id);
@@ -97,6 +111,7 @@ export class EventController {
   @ApiOperation({ summary: 'Join event' })
   @ApiParam({ name: 'id', example: 'cm8xabcd1234' })
   @ApiConflictResponse({ description: 'Already joined' })
+  @ApiOkResponse({ type: ParticipantRecordDto })
   @HttpCode(HttpStatus.OK)
   join(@Param('id') eventId: string, @CurrentUser() user: JwtUser) {
     return this.eventService.join(eventId, user.id);
@@ -108,8 +123,10 @@ export class EventController {
   @ApiOperation({ summary: 'Leave event' })
   @ApiParam({ name: 'id', example: 'cm8xabcd1234' })
   @ApiNotFoundResponse({ description: 'Not a participant' })
+  @ApiOkResponse({ type: SuccessResponseDto })
   @HttpCode(HttpStatus.OK)
-  leave(@Param('id') eventId: string, @CurrentUser() user: JwtUser) {
-    return this.eventService.leave(eventId, user.id);
+  async leave(@Param('id') eventId: string, @CurrentUser() user: JwtUser) {
+    await this.eventService.leave(eventId, user.id);
+    return { success: true };
   }
 }

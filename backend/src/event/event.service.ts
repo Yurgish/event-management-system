@@ -15,7 +15,8 @@ import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
 import { UpdateEventDto } from '@/event/dto/update-event.dto';
 import { PrismaService } from '@/prisma/prisma.service';
 
-const EVENT_SELECT = {
+/** Used for list, create, update — no participant list, only count. */
+const EVENT_SUMMARY_SELECT = {
   id: true,
   title: true,
   description: true,
@@ -26,6 +27,12 @@ const EVENT_SELECT = {
   createdAt: true,
   organizerId: true,
   organizer: { select: { id: true, name: true } },
+  _count: { select: { participants: true } },
+} as const;
+
+/** Used for single-event detail — includes full participant list. */
+const EVENT_SELECT = {
+  ...EVENT_SUMMARY_SELECT,
   participants: {
     select: {
       userId: true,
@@ -33,7 +40,6 @@ const EVENT_SELECT = {
       user: { select: { id: true, name: true } },
     },
   },
-  _count: { select: { participants: true } },
 } as const;
 
 @Injectable()
@@ -79,7 +85,7 @@ export class EventService {
     const [items, total] = await this.prismaService.$transaction([
       this.prismaService.event.findMany({
         where,
-        select: EVENT_SELECT,
+        select: EVENT_SUMMARY_SELECT,
         orderBy: { dateTime: 'asc' },
         skip,
         take,
@@ -112,7 +118,7 @@ export class EventService {
 
     return this.prismaService.event.create({
       data: { ...rest, dateTime: new Date(dateTime), organizerId: userId },
-      select: EVENT_SELECT,
+      select: EVENT_SUMMARY_SELECT,
     });
   }
 
@@ -135,7 +141,7 @@ export class EventService {
         ...rest,
         ...(dateTime && { dateTime: new Date(dateTime) }),
       },
-      select: EVENT_SELECT,
+      select: EVENT_SUMMARY_SELECT,
     });
   }
 
