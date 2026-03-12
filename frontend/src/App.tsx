@@ -1,18 +1,16 @@
-import Header from '@/components/Header';
+import { RouterProvider } from 'react-router-dom';
+
 import { useAuthBootstrap } from '@/hooks/useAuthBootstrap';
+import { router } from '@/router';
 
 function App() {
   const { isAuthBootstrapping } = useAuthBootstrap();
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {!isAuthBootstrapping && <Header />}
+  if (isAuthBootstrapping) {
+    return <div className="min-h-screen bg-gray-50" />;
+  }
 
-      <main className="mx-auto w-full max-w-7xl px-4 py-8">
-        <h1 className="text-2xl font-semibold">Event Management System</h1>
-      </main>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
