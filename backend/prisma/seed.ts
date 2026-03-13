@@ -359,6 +359,22 @@ function getSeedEvents(): SeedEventInput[] {
       ],
     },
     {
+      id: 'seed-event-open-source-mentoring-hour',
+      title: 'Open Source Mentoring Hour',
+      description:
+        'Bring your repository and get live mentoring on issues, pull requests, and contribution workflows.',
+      dateTime: daysFromNow(3, 19),
+      location: 'Remote (Discord)',
+      capacity: null,
+      isPublic: true,
+      organizerEmail: 'olena@techevents.dev',
+      participantEmails: [
+        'max@techevents.dev',
+        'iryna@techevents.dev',
+        'denys@techevents.dev',
+      ],
+    },
+    {
       id: 'seed-event-security-jwt-and-cookies',
       title: 'Security Clinic: JWT, Cookies, and Sessions',
       description:
@@ -467,6 +483,18 @@ function getSeedEvents(): SeedEventInput[] {
         'natalia@techevents.dev',
         'bohdan@techevents.dev',
       ],
+    },
+    {
+      id: 'seed-event-community-qa-office-hours',
+      title: 'Community Q&A Office Hours',
+      description:
+        'Weekly open room for architecture questions, code review advice, and career mentoring for engineers.',
+      dateTime: daysFromNow(64, 18),
+      location: 'Remote (Google Meet)',
+      capacity: null,
+      isPublic: true,
+      organizerEmail: 'max@techevents.dev',
+      participantEmails: [],
     },
     {
       id: 'seed-event-event-driven-architecture',

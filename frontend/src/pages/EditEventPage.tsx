@@ -1,9 +1,24 @@
-import { useParams } from 'react-router-dom';
+import { ArrowLeftIcon } from 'lucide-react';
+import { useMemo } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import { useGetEventByIdQuery } from '@/store/api';
+import { EventForm } from '@/components/events';
+import { Button } from '@/components/ui/button';
+import {
+  buildEventRequest,
+  type EventFormValues,
+  getEventFormValuesFromEvent,
+} from '@/lib/event-form';
+import { getServerErrorMessage } from '@/lib/server-error';
+import { useGetEventByIdQuery, useUpdateEventMutation } from '@/store/api';
 
 function EditEventPage() {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [updateEventMutation, { isLoading: isSaving }] =
+    useUpdateEventMutation();
+
   const {
     data: event,
     isError,
@@ -12,28 +27,63 @@ function EditEventPage() {
     skip: !id,
   });
 
+  const initialValues = useMemo(
+    () => (event ? getEventFormValuesFromEvent(event) : undefined),
+    [event],
+  );
+
   if (isLoading) {
     return <p className="text-muted-foreground">Loading event...</p>;
   }
 
   if (!id || isError || !event) {
     return (
-      <p className="text-destructive">
-        Failed to load event for editing. Try opening it again.
-      </p>
+      <section className="space-y-4">
+        <p className="text-destructive">
+          Failed to load event for editing. Try opening it again.
+        </p>
+        <Button asChild variant="outline">
+          <Link to="/my-events">Back to My Events</Link>
+        </Button>
+      </section>
     );
   }
 
+  const onSubmit = async (values: EventFormValues) => {
+    try {
+      await updateEventMutation({
+        id,
+        body: buildEventRequest(values),
+      }).unwrap();
+
+      toast.success('Event updated successfully');
+      navigate(`/events/${id}`);
+    } catch (error) {
+      toast.error(
+        getServerErrorMessage(
+          error,
+          'Failed to update event. Please try again.',
+        ),
+      );
+    }
+  };
+
   return (
-    <section className="space-y-3">
-      <h1 className="text-3xl font-semibold tracking-tight">Edit Event</h1>
-      <p className="text-muted-foreground max-w-2xl text-sm sm:text-base">
-        Editing event:{' '}
-        <span className="text-foreground font-medium">{event.title}</span>
-      </p>
-      <p className="text-muted-foreground max-w-2xl text-sm sm:text-base">
-        The edit form can be added here without changing the router again.
-      </p>
+    <section className="mx-auto flex min-h-[calc(100vh-7rem)] max-w-lg flex-col justify-center gap-3">
+      <Button asChild variant="ghost" className="w-fit">
+        <Link to={`/events/${id}`}>
+          <ArrowLeftIcon className="size-4" />
+          Back to Event
+        </Link>
+      </Button>
+
+      <EventForm
+        mode="edit"
+        initialValues={initialValues}
+        isSaving={isSaving}
+        onCancel={() => navigate(-1)}
+        onSubmit={onSubmit}
+      />
     </section>
   );
 }

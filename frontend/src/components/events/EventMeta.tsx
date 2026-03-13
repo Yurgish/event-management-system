@@ -1,9 +1,15 @@
-import { CalendarClockIcon, MapPinIcon, UsersIcon } from 'lucide-react';
+import {
+  CalendarClockIcon,
+  InfinityIcon,
+  MapPinIcon,
+  UsersIcon,
+} from 'lucide-react';
 
 interface EventMetaProps {
   dateTime: string;
   location: string;
   participantsLabel: string;
+  isUnlimited?: boolean;
   organizerName: string;
 }
 
@@ -11,6 +17,7 @@ function EventMeta({
   dateTime,
   location,
   participantsLabel,
+  isUnlimited = false,
   organizerName,
 }: EventMetaProps) {
   return (
@@ -27,7 +34,11 @@ function EventMeta({
 
       <p className="text-muted-foreground flex items-center gap-2">
         <UsersIcon className="size-4 shrink-0" />
-        {participantsLabel} participants
+        <span className="inline-flex items-center">
+          <span>{participantsLabel}</span>
+          {isUnlimited && <InfinityIcon className="size-4 shrink-0" />}
+        </span>
+        <span>participants</span>
       </p>
 
       <p className="text-muted-foreground text-sm">

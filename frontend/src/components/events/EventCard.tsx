@@ -1,4 +1,9 @@
-import { CalendarClockIcon, MapPinIcon, UsersIcon } from 'lucide-react';
+import {
+  CalendarClockIcon,
+  InfinityIcon,
+  MapPinIcon,
+  UsersIcon,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getEventCapacityMeta } from '@/lib/event-capacity';
 import type { EventSummary } from '@/types/api/events';
 
 interface EventCardProps {
@@ -43,11 +49,10 @@ function EventCard({ event, isJoined }: EventCardProps) {
     setParticipantsCount(event._count.participants);
   }, [event._count.participants, event.id]);
 
-  const capacity = typeof event.capacity === 'number' ? event.capacity : null;
-  const isFull = capacity !== null && participantsCount >= capacity;
-  const participantsLabel = capacity
-    ? `${participantsCount}/${capacity}`
-    : `${participantsCount}/unlimited`;
+  const { isUnlimited, isFull, participantsLabel } = getEventCapacityMeta(
+    participantsCount,
+    event.capacity,
+  );
   const descriptionPreview = useMemo(
     () => toDescriptionPreview(event.description),
     [event.description],
@@ -89,7 +94,11 @@ function EventCard({ event, isJoined }: EventCardProps) {
 
         <p className="text-muted-foreground flex items-center gap-2">
           <UsersIcon className="size-4" />
-          {participantsLabel} participants
+          <span className="inline-flex items-center">
+            <span>{participantsLabel}</span>
+            {isUnlimited && <InfinityIcon className="size-4 shrink-0" />}
+          </span>
+          <span>participants</span>
         </p>
       </CardContent>
 

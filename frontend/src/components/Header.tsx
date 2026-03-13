@@ -1,6 +1,7 @@
-import { Calendar, List, LogOutIcon, Plus } from 'lucide-react';
+import { Calendar, List, LogOutIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import CreateEventButton from '@/components/CreateEventButton';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -24,11 +25,7 @@ const AuthenticatedActions = ({
         <Calendar /> My Events
       </Link>
     </Button>
-    <Button asChild variant="default" size="lg">
-      <Link to="/create-event">
-        <Plus /> Create Event
-      </Link>
-    </Button>
+    <CreateEventButton />
     <Separator orientation="vertical" />
     <div className="flex items-center gap-2">
       <Avatar>
