@@ -21,7 +21,7 @@ PoC Event Management application built with:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/event-management-system.git
+git clone https://github.com/Yurgish/event-management-system.git
 cd event-management-system
 ```
 
@@ -106,7 +106,7 @@ Note: all seeded users share the same default password: `123123`.
 1. Clone and install dependencies:
 
 ```bash
-git clone https://github.com/your-username/event-management-system.git
+git clone https://github.com/Yurgish/event-management-system.git
 cd event-management-system
 npm install
 npm --prefix backend install
