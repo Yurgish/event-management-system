@@ -1,4 +1,5 @@
 import type { EventApi } from '@fullcalendar/core/index.js';
+import { Link } from 'react-router-dom';
 
 import {
   Dialog,
@@ -12,7 +13,6 @@ interface DayEventsDialogProps {
   dateLabel: string;
   events: EventApi[];
   onOpenChange: (open: boolean) => void;
-  onEventSelect: (eventId: string) => void;
 }
 
 function DayEventsDialog({
@@ -20,15 +20,14 @@ function DayEventsDialog({
   dateLabel,
   events,
   onOpenChange,
-  onEventSelect,
 }: DayEventsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-h-[calc(100dvh-1rem)] overflow-hidden sm:max-h-[calc(100dvh-4rem)]">
         <DialogHeader>
           <DialogTitle>{dateLabel}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2">
+        <div className="max-h-[60dvh] space-y-2 overflow-y-auto pr-1 sm:max-h-[50dvh]">
           {events.length === 0 && (
             <p className="text-muted-foreground text-sm">
               No events planned for this day.
@@ -49,15 +48,11 @@ function DayEventsDialog({
             const eventId = event.extendedProps?.eventId as string | undefined;
 
             return (
-              <button
+              <Link
                 key={event.id}
-                type="button"
-                className="hover:bg-accent flex w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors"
-                onClick={() => {
-                  if (eventId) {
-                    onEventSelect(eventId);
-                  }
-                }}
+                to={eventId ? `/events/${eventId}` : '#'}
+                className="hover:bg-accent flex w-full min-w-0 items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors sm:px-3 sm:py-2.5"
+                onClick={() => onOpenChange(false)}
               >
                 <span
                   className="size-2 shrink-0 rounded-full"
@@ -75,7 +70,7 @@ function DayEventsDialog({
                     </span>
                   )}
                 </span>
-              </button>
+              </Link>
             );
           })}
         </div>

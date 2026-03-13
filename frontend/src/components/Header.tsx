@@ -22,7 +22,8 @@ const AuthenticatedActions = ({
   <>
     <Button asChild variant="ghost" size="lg">
       <Link to="/my-events">
-        <Calendar /> My Events
+        <Calendar />
+        <span className="hidden sm:inline">My Events</span>
       </Link>
     </Button>
     <CreateEventButton />
@@ -31,7 +32,7 @@ const AuthenticatedActions = ({
       <Avatar>
         <AvatarFallback>{user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
-      <span className="text-sm font-medium">{user?.name}</span>
+      <span className="hidden text-sm font-medium sm:inline">{user?.name}</span>
     </div>
     <Button
       variant="ghost"
@@ -87,7 +88,8 @@ const Header = () => {
         <div className="flex items-center gap-1 sm:gap-4">
           <Button asChild variant="ghost" size="lg">
             <Link to="/events">
-              <List /> Events
+              <List />
+              <span className="hidden sm:inline">Events</span>
             </Link>
           </Button>
 

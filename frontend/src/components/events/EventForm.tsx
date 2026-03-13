@@ -85,7 +85,9 @@ function EventForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardTitle className="text-xl font-semibold tracking-tight sm:text-3xl">
+          {title}
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
@@ -211,23 +213,23 @@ function EventForm({
                     <Field orientation="horizontal">
                       <RadioGroupItem id="public" value="public" />
                       <FieldLabel htmlFor="public">
-                        <div className="flex gap-1">
-                          <span>Public</span>
+                        <span>
+                          Public{' '}
                           <span className="text-muted-foreground text-sm font-light">
                             - Anyone can see and join this event
                           </span>
-                        </div>
+                        </span>
                       </FieldLabel>
                     </Field>
                     <Field orientation="horizontal">
                       <RadioGroupItem id="private" value="private" />
                       <FieldLabel htmlFor="private">
-                        <div className="flex gap-1">
-                          <span>Private</span>
+                        <span>
+                          Private{' '}
                           <span className="text-muted-foreground text-sm font-light">
                             - Only invited people can see this event
                           </span>
-                        </div>
+                        </span>
                       </FieldLabel>
                     </Field>
                   </RadioGroup>

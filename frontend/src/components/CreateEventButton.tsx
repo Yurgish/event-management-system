@@ -17,7 +17,8 @@ function CreateEventButton({
   return (
     <Button asChild variant={variant} size={size} className={className}>
       <Link to="/create-event">
-        <Plus /> Create Event
+        <Plus />
+        <span className="hidden sm:inline">Create Event</span>
       </Link>
     </Button>
   );

@@ -50,7 +50,7 @@ function EventsPage() {
 
       <form
         onSubmit={handleSearchSubmit}
-        className="flex flex-col gap-2 sm:w-1/3 sm:flex-row"
+        className="xs:flex-row flex flex-col gap-2 md:max-w-[32rem]"
       >
         <div className="relative flex-1">
           <SearchIcon className="text-muted-foreground absolute top-2 left-3 size-4" />

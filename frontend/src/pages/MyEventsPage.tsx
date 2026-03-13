@@ -182,11 +182,6 @@ function MyEventsPage() {
     setDayModal((prev) => ({ ...prev, open }));
   };
 
-  const handleDayEventSelect = (eventId: string) => {
-    navigate(`/events/${eventId}`);
-    setDayModal((prev) => ({ ...prev, open: false }));
-  };
-
   const handleDayCellClassNames = ({ date }: { date: Date }) => {
     if (!isMobile) {
       return [];
@@ -301,9 +296,11 @@ function MyEventsPage() {
   return (
     <>
       <section className="space-y-8">
-        <div className="flex gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-semibold tracking-tight">My Events</h1>
+        <div className="flex flex-row items-center justify-between gap-4">
+          <div className="sm:space-y-2">
+            <h1 className="text-xl font-semibold tracking-tight sm:text-3xl">
+              My Events
+            </h1>
             <p className="text-muted-foreground text-sm sm:text-base">
               View your organized and joined events on a calendar.
             </p>
@@ -312,17 +309,18 @@ function MyEventsPage() {
           <CreateEventButton />
         </div>
         <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Button
               type="button"
               variant="outline"
               onClick={handlePrev}
-              size="lg"
+              size="sm"
+              className="sm:h-9 sm:px-2.5"
             >
               <ChevronLeftIcon className="size-4" />
             </Button>
 
-            <h2 className="text-center text-lg font-semibold tracking-tight">
+            <h2 className="text-center text-sm font-semibold tracking-tight sm:text-lg">
               {calendarTitle}
             </h2>
 
@@ -330,15 +328,17 @@ function MyEventsPage() {
               type="button"
               variant="outline"
               onClick={handleNext}
-              size="lg"
+              size="sm"
+              className="sm:h-9 sm:px-2.5"
             >
               <ChevronRightIcon className="size-4" />
             </Button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Button
               type="button"
-              size="lg"
+              size="sm"
+              className="sm:h-9 sm:px-2.5"
               variant={currentView === 'dayGridMonth' ? 'default' : 'outline'}
               onClick={() => handleViewChange('dayGridMonth')}
             >
@@ -346,7 +346,8 @@ function MyEventsPage() {
             </Button>
             <Button
               type="button"
-              size="lg"
+              size="sm"
+              className="sm:h-9 sm:px-2.5"
               variant={currentView === 'dayGridWeek' ? 'default' : 'outline'}
               onClick={() => handleViewChange('dayGridWeek')}
             >
@@ -356,12 +357,12 @@ function MyEventsPage() {
         </div>
         <div className="bg-card space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
           <div className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap items-center gap-4 text-sm">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-emerald-700 dark:border-emerald-500/25 dark:bg-emerald-500/15 dark:text-emerald-300">
+            <div className="flex flex-wrap items-center gap-2 text-xs sm:gap-4 sm:text-sm">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-emerald-700 sm:gap-2 sm:px-3 sm:py-1 dark:border-emerald-500/25 dark:bg-emerald-500/15 dark:text-emerald-300">
                 <span className="size-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
                 Organized by you
               </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-sky-700 dark:border-sky-500/25 dark:bg-sky-500/15 dark:text-sky-300">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-sky-700 sm:gap-2 sm:px-3 sm:py-1 dark:border-sky-500/25 dark:bg-sky-500/15 dark:text-sky-300">
                 <span className="size-2 rounded-full bg-sky-600 dark:bg-sky-400" />
                 Joined by you
               </span>
@@ -405,7 +406,6 @@ function MyEventsPage() {
         dateLabel={dayModal.dateLabel}
         events={dayModal.events}
         onOpenChange={handleDayModalChange}
-        onEventSelect={handleDayEventSelect}
       />
     </>
   );

@@ -15,6 +15,10 @@ body {
   margin: 0;
 }
 
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);
