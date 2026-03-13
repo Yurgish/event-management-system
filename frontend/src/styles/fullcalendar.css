@@ -1,0 +1,195 @@
+.my-events-calendar .fc {
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: transparent;
+  --fc-border-color: transparent;
+  --fc-today-bg-color: transparent;
+  --fc-event-border-color: transparent;
+  --fc-event-text-color: white;
+  color: var(--foreground);
+  font-family: inherit;
+}
+
+.my-events-calendar .fc .fc-scrollgrid,
+.my-events-calendar .fc .fc-scrollgrid-section > * {
+  border: 0;
+}
+
+.my-events-calendar .fc .fc-scrollgrid table,
+.my-events-calendar .fc .fc-col-header,
+.my-events-calendar .fc .fc-daygrid-body table {
+  border-collapse: separate;
+  border-spacing: 0.35rem 0.25rem;
+}
+
+.my-events-calendar .fc .fc-col-header-cell {
+  border: 0;
+}
+
+.my-events-calendar .fc .fc-col-header-cell-cushion {
+  color: var(--muted-foreground);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.my-events-calendar .fc .fc-daygrid-day {
+  border: 0;
+  background: transparent;
+}
+
+.my-events-calendar .fc .fc-daygrid-day-frame {
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 0.15rem);
+  background: var(--card);
+  padding: 0.15rem;
+  overflow: hidden;
+  min-height: 6rem;
+  height: 6rem;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+.my-events-calendar .fc .fc-daygrid-event-harness {
+  margin-top: 0 !important;
+}
+
+.my-events-calendar .fc .fc-daygrid-day:hover .fc-daygrid-day-frame {
+  background: color-mix(in oklab, var(--accent) 45%, var(--card));
+}
+
+.my-events-calendar .fc .fc-day-today .fc-daygrid-day-frame {
+  border-color: color-mix(in oklab, var(--primary) 30%, var(--border));
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--primary) 18%, transparent);
+  background: color-mix(in oklab, var(--primary) 6%, var(--card));
+}
+
+.my-events-calendar .fc .fc-daygrid-day-number {
+  color: var(--foreground);
+  font-size: 0.875rem;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+}
+
+.my-events-calendar .fc .fc-day-today .fc-daygrid-day-number {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.my-events-calendar .fc .fc-daygrid-day-events {
+  margin: 0.25rem 0.15rem 0;
+}
+
+.my-events-calendar .fc .fc-event {
+  border-radius: var(--radius);
+  font-size: 0.75rem;
+  padding: 0 0.25rem;
+  cursor: pointer;
+  border: none;
+  box-shadow: none;
+}
+
+.my-events-calendar .fc .fc-event:hover {
+  opacity: 0.9;
+}
+
+.my-events-calendar .fc .fc-event-time {
+  font-weight: 600;
+}
+
+.my-events-calendar .fc .fc-more-link {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+
+.my-events-calendar .fc .fc-more-link.my-events-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: calc(var(--radius) - 2px);
+  padding: 0.1rem 0.35rem;
+  border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  background: color-mix(in oklab, var(--accent) 22%, var(--card));
+  line-height: 1;
+  text-decoration: none;
+}
+
+.my-events-calendar .fc .fc-more-link-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-events-calendar .fc .fc-more-link-label {
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 500;
+}
+
+.my-events-calendar .fc .fc-more-link.my-events-more-link:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.my-events-calendar .fc .fc-popover {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .my-events-calendar .fc .fc-scrollgrid table,
+  .my-events-calendar .fc .fc-col-header,
+  .my-events-calendar .fc .fc-daygrid-body table {
+    border-spacing: 0.2rem 0.15rem;
+  }
+
+  .my-events-calendar .fc .fc-daygrid-day-frame {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .my-events-calendar .fc .fc-daygrid-day-number {
+    font-size: 0.78rem;
+    padding: 0.15rem 0.35rem;
+  }
+
+  .my-events-calendar
+    .fc
+    .fc-daygrid-day.my-events-day-organized
+    .fc-daygrid-day-frame {
+    background: color-mix(in oklab, #059669 18%, var(--card));
+    border-color: color-mix(in oklab, #059669 50%, var(--border));
+  }
+
+  .my-events-calendar
+    .fc
+    .fc-daygrid-day.my-events-day-joined
+    .fc-daygrid-day-frame {
+    background: color-mix(in oklab, #0284c7 18%, var(--card));
+    border-color: color-mix(in oklab, #0284c7 50%, var(--border));
+  }
+
+  .my-events-calendar
+    .fc
+    .fc-daygrid-day.my-events-day-mixed
+    .fc-daygrid-day-frame {
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, #059669 20%, var(--card)),
+      color-mix(in oklab, #0284c7 20%, var(--card))
+    );
+    border-color: color-mix(in oklab, #0284c7 35%, #059669 35%, var(--border));
+  }
+
+  .my-events-calendar .fc .fc-daygrid-day-events {
+    display: none;
+  }
+
+  .my-events-calendar .fc .fc-more-link.my-events-more-link-mobile {
+    display: none;
+  }
+}
