@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { APP_ROUTES } from '@/constants/routes';
 
 interface DayEventsDialogProps {
   open: boolean;
@@ -50,7 +51,7 @@ function DayEventsDialog({
             return (
               <Link
                 key={event.id}
-                to={eventId ? `/events/${eventId}` : '#'}
+                to={eventId ? APP_ROUTES.EVENT_DETAILS(eventId) : '#'}
                 className="hover:bg-accent flex w-full min-w-0 items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors sm:px-3 sm:py-2.5"
                 onClick={() => onOpenChange(false)}
               >

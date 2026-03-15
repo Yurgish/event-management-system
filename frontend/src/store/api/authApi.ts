@@ -1,3 +1,4 @@
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { baseApi } from '@/store/api/baseApi';
 import { clearCredentials, setCredentials } from '@/store/slices/authSlice';
 import type {
@@ -11,7 +12,7 @@ export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<AuthResponse, RegisterRequest>({
       query: (body) => ({
-        url: '/auth/register',
+        url: API_ENDPOINTS.AUTH_REGISTER,
         method: 'POST',
         body,
       }),
@@ -23,7 +24,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     login: builder.mutation<AuthResponse, LoginRequest>({
       query: (body) => ({
-        url: '/auth/login',
+        url: API_ENDPOINTS.AUTH_LOGIN,
         method: 'POST',
         body,
       }),
@@ -35,7 +36,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     refresh: builder.mutation<AuthResponse, void>({
       query: () => ({
-        url: '/auth/refresh',
+        url: API_ENDPOINTS.AUTH_REFRESH,
         method: 'POST',
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
@@ -46,7 +47,7 @@ export const authApi = baseApi.injectEndpoints({
     }),
     logout: builder.mutation<LogoutResponse, void>({
       query: () => ({
-        url: '/auth/logout',
+        url: API_ENDPOINTS.AUTH_LOGOUT,
         method: 'POST',
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as yup from 'yup';
 
+import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -57,7 +58,7 @@ function LoginPage() {
     try {
       await loginMutation(values).unwrap();
       toast.success('Successfully logged in');
-      navigate('/events', { replace: true });
+      navigate(APP_ROUTES.EVENTS, { replace: true });
     } catch (error) {
       toast.error(
         getServerErrorMessage(error, 'Login failed. Please try again.'),
@@ -110,7 +111,7 @@ function LoginPage() {
               </Button>
               <FieldDescription className="text-center">
                 Don&apos;t have an account?{' '}
-                <Link to="/register">Register here</Link>
+                <Link to={APP_ROUTES.REGISTER}>Register here</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>

@@ -1,3 +1,4 @@
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { baseApi } from '@/store/api/baseApi';
 import type {
   CreateEventRequest,
@@ -16,11 +17,11 @@ export const eventsApi = baseApi.injectEndpoints({
       query: (params) =>
         params
           ? {
-              url: '/events',
+              url: API_ENDPOINTS.EVENTS,
               params,
             }
           : {
-              url: '/events',
+              url: API_ENDPOINTS.EVENTS,
             },
       providesTags: (result) =>
         result
@@ -34,12 +35,12 @@ export const eventsApi = baseApi.injectEndpoints({
           : [{ type: 'Event' as const, id: 'LIST' }],
     }),
     getEventById: builder.query<EventDetail, string>({
-      query: (id) => `/events/${id}`,
+      query: (id) => API_ENDPOINTS.EVENT_BY_ID(id),
       providesTags: (_, __, id) => [{ type: 'Event', id }],
     }),
     createEvent: builder.mutation<EventSummary, CreateEventRequest>({
       query: (body) => ({
-        url: '/events',
+        url: API_ENDPOINTS.EVENTS,
         method: 'POST',
         body,
       }),
@@ -50,7 +51,7 @@ export const eventsApi = baseApi.injectEndpoints({
       { id: string; body: UpdateEventRequest }
     >({
       query: ({ id, body }) => ({
-        url: `/events/${id}`,
+        url: API_ENDPOINTS.EVENT_BY_ID(id),
         method: 'PATCH',
         body,
       }),
@@ -62,7 +63,7 @@ export const eventsApi = baseApi.injectEndpoints({
     }),
     deleteEvent: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/events/${id}`,
+        url: API_ENDPOINTS.EVENT_BY_ID(id),
         method: 'DELETE',
       }),
       invalidatesTags: (_, __, id) => [
@@ -73,14 +74,14 @@ export const eventsApi = baseApi.injectEndpoints({
     }),
     joinEvent: builder.mutation<ParticipantRecord, string>({
       query: (id) => ({
-        url: `/events/${id}/join`,
+        url: API_ENDPOINTS.EVENT_JOIN(id),
         method: 'POST',
       }),
       invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],
     }),
     leaveEvent: builder.mutation<SuccessResponse, string>({
       query: (id) => ({
-        url: `/events/${id}/leave`,
+        url: API_ENDPOINTS.EVENT_LEAVE(id),
         method: 'POST',
       }),
       invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],

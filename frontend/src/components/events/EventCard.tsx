@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { APP_ROUTES } from '@/constants/routes';
 import { getEventCapacityMeta } from '@/lib/event-capacity';
 import type { EventSummary } from '@/types/api/events';
 
@@ -104,7 +105,7 @@ function EventCard({ event, isJoined }: EventCardProps) {
 
       <CardFooter className="mt-auto flex gap-2">
         <Button asChild variant="outline" className="flex-1">
-          <Link to={`/events/${event.id}`}>Details</Link>
+          <Link to={APP_ROUTES.EVENT_DETAILS(event.id)}>Details</Link>
         </Button>
 
         <EventJoinButton

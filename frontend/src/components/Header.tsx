@@ -2,6 +2,7 @@ import { Calendar, List, LogOutIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import CreateEventButton from '@/components/CreateEventButton';
+import { APP_ROUTES } from '@/constants/routes';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -21,7 +22,7 @@ const AuthenticatedActions = ({
 }: AuthenticatedActionsProps) => (
   <>
     <Button asChild variant="ghost" size="lg">
-      <Link to="/my-events">
+      <Link to={APP_ROUTES.MY_EVENTS}>
         <Calendar />
         <span className="hidden sm:inline">My Events</span>
       </Link>
@@ -49,9 +50,9 @@ const AuthenticatedActions = ({
 const AuthPageActions = ({ isLoginPage }: { isLoginPage: boolean }) => (
   <Button asChild variant="default" size="lg">
     {isLoginPage ? (
-      <Link to="/register">Register</Link>
+      <Link to={APP_ROUTES.REGISTER}>Register</Link>
     ) : (
-      <Link to="/login">Login</Link>
+      <Link to={APP_ROUTES.LOGIN}>Login</Link>
     )}
   </Button>
 );
@@ -59,10 +60,10 @@ const AuthPageActions = ({ isLoginPage }: { isLoginPage: boolean }) => (
 const GuestActions = () => (
   <>
     <Button asChild variant="ghost" size="lg">
-      <Link to="/login">Login</Link>
+      <Link to={APP_ROUTES.LOGIN}>Login</Link>
     </Button>
     <Button asChild variant="default" size="lg">
-      <Link to="/register">Register</Link>
+      <Link to={APP_ROUTES.REGISTER}>Register</Link>
     </Button>
   </>
 );
@@ -73,12 +74,12 @@ const Header = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const isLoginPage = pathname === '/login';
-  const isAuthPage = isLoginPage || pathname === '/register';
+  const isLoginPage = pathname === APP_ROUTES.LOGIN;
+  const isAuthPage = isLoginPage || pathname === APP_ROUTES.REGISTER;
 
   const handleLogout = () => {
     logout().finally(() => {
-      navigate('/login', { replace: true });
+      navigate(APP_ROUTES.LOGIN, { replace: true });
     });
   };
 
@@ -87,7 +88,7 @@ const Header = () => {
       <div className="layout-container flex items-center justify-end py-2">
         <div className="flex items-center gap-1 sm:gap-4">
           <Button asChild variant="ghost" size="lg">
-            <Link to="/events">
+            <Link to={APP_ROUTES.EVENTS}>
               <List />
               <span className="hidden sm:inline">Events</span>
             </Link>

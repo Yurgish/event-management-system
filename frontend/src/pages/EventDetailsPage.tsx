@@ -8,6 +8,7 @@ import {
   EventMeta,
   EventParticipants,
 } from '@/components/events';
+import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -62,7 +63,7 @@ function EventDetailsPage() {
           Failed to load event details. Please return to events list.
         </p>
         <Button asChild variant="outline">
-          <Link to="/events">Back to Events</Link>
+          <Link to={APP_ROUTES.EVENTS}>Back to Events</Link>
         </Button>
       </section>
     );
@@ -79,7 +80,7 @@ function EventDetailsPage() {
       await deleteEvent(event.id).unwrap();
       setIsDeleteDialogOpen(false);
       toast.success('Event deleted successfully.');
-      navigate('/events');
+      navigate(APP_ROUTES.EVENTS);
     } catch (error) {
       toast.error(
         getServerErrorMessage(
@@ -93,7 +94,7 @@ function EventDetailsPage() {
   return (
     <section className="space-y-6">
       <Button asChild variant="ghost" className="w-fit">
-        <Link to="/events">
+        <Link to={APP_ROUTES.EVENTS}>
           <ArrowLeftIcon className="size-4" />
           Back to Events
         </Link>
@@ -123,7 +124,7 @@ function EventDetailsPage() {
           {isOwner && (
             <>
               <Button asChild variant="outline">
-                <Link to={`/events/${event.id}/edit`}>
+                <Link to={APP_ROUTES.EVENT_EDIT(event.id)}>
                   <PencilIcon className="size-4" />
                   Edit
                 </Link>

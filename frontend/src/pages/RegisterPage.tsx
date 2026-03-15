@@ -20,6 +20,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { APP_ROUTES } from '@/constants/routes';
 import { getServerErrorMessage } from '@/lib/server-error';
 import { useRegisterMutation } from '@/store/api';
 
@@ -66,7 +67,7 @@ function RegisterPage() {
     try {
       await registerMutation(values).unwrap();
       toast.success('Account created successfully');
-      navigate('/events', { replace: true });
+      navigate(APP_ROUTES.EVENTS, { replace: true });
     } catch (error) {
       toast.error(
         getServerErrorMessage(error, 'Registration failed. Please try again.'),
@@ -132,7 +133,8 @@ function RegisterPage() {
                   : 'Create account'}
               </Button>
               <FieldDescription className="text-center">
-                Already have an account? <Link to="/login">Login here</Link>
+                Already have an account?{' '}
+                <Link to={APP_ROUTES.LOGIN}>Login here</Link>
               </FieldDescription>
             </Field>
           </FieldGroup>
