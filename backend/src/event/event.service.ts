@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -15,6 +14,7 @@ import {
   ListEventsQueryDto,
   UpdateEventDto,
 } from '@/event/dto';
+import { ParticipantService } from '@/participant/participant.service';
 import { PrismaService } from '@/prisma/prisma.service';
 
 /** Used for list, create, update — no participant list, only count. */
@@ -46,7 +46,27 @@ const EVENT_SELECT = {
 
 @Injectable()
 export class EventService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly participantService: ParticipantService,
+  ) {}
+
+  private async findEventForParticipationOrThrow(eventId: string) {
+    const event = await this.prismaService.event.findUnique({
+      where: { id: eventId },
+      select: {
+        id: true,
+        capacity: true,
+        _count: { select: { participants: true } },
+      },
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    return event;
+  }
 
   private buildPublicWhereClause(search?: string) {
     return {
@@ -98,11 +118,10 @@ export class EventService {
     let joinedIds = new Set<string>();
 
     if (userId && items.length > 0) {
-      const participations = await this.prismaService.participant.findMany({
-        where: { userId, eventId: { in: items.map((i) => i.id) } },
-        select: { eventId: true },
-      });
-      joinedIds = new Set(participations.map((p) => p.eventId));
+      joinedIds = await this.participantService.findJoinedEventIds(
+        userId,
+        items.map((item) => item.id),
+      );
     }
 
     const itemsWithIsJoined = items.map((item) => ({
@@ -173,12 +192,7 @@ export class EventService {
   }
 
   async join(eventId: string, userId: string) {
-    const event = await this.findOne(eventId);
-
-    const alreadyJoined = event.participants.some((p) => p.userId === userId);
-    if (alreadyJoined) {
-      throw new ConflictException('You have already joined this event');
-    }
+    const event = await this.findEventForParticipationOrThrow(eventId);
 
     if (
       event.capacity !== null &&
@@ -187,24 +201,12 @@ export class EventService {
       throw new BadRequestException('This event is full');
     }
 
-    return this.prismaService.participant.create({
-      data: { eventId, userId },
-    });
+    return this.participantService.join(eventId, userId);
   }
 
   async leave(eventId: string, userId: string) {
-    await this.findOne(eventId);
+    await this.findEventForParticipationOrThrow(eventId);
 
-    const participant = await this.prismaService.participant.findUnique({
-      where: { userId_eventId: { userId, eventId } },
-    });
-
-    if (!participant) {
-      throw new NotFoundException('You are not a participant of this event');
-    }
-
-    await this.prismaService.participant.delete({
-      where: { userId_eventId: { userId, eventId } },
-    });
+    await this.participantService.leave(eventId, userId);
   }
 }
