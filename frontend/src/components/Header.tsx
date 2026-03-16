@@ -2,10 +2,10 @@ import { Calendar, List, LogOutIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import CreateEventButton from '@/components/CreateEventButton';
-import { APP_ROUTES } from '@/constants/routes';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks';
 import { useLogoutMutation } from '@/store/api';
 

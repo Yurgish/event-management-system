@@ -4,12 +4,13 @@ import FullCalendar from '@fullcalendar/react';
 import CreateEventButton from '@/components/CreateEventButton';
 import DayEventsDialog from '@/components/events/DayEventsDialog';
 import MoreEventsLinkContent from '@/components/events/MoreEventsLinkContent';
-import MyEventsLegend from '@/components/events/my-events/MyEventsLegend';
 import MyEventsToolbar from '@/components/events/my-events/MyEventsToolbar';
+import { useAuth } from '@/hooks';
 import { useMyEventsCalendar } from '@/hooks/useMyEventsCalendar';
 import { useGetMyEventsQuery } from '@/store/api';
 
 function MyEventsPage() {
+  const { user } = useAuth();
   const { data, isError, isLoading } = useGetMyEventsQuery();
   const {
     calendarRef,
@@ -28,7 +29,7 @@ function MyEventsPage() {
     handlePrev,
     handleNext,
     handleViewChange,
-  } = useMyEventsCalendar(data);
+  } = useMyEventsCalendar(data, user?.id);
 
   if (isLoading) {
     return <p className="text-muted-foreground">Loading your events...</p>;
@@ -66,8 +67,6 @@ function MyEventsPage() {
         />
 
         <div className="bg-card space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
-          <MyEventsLegend />
-
           <div className="my-events-calendar">
             <FullCalendar
               ref={calendarRef}

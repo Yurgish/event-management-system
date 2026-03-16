@@ -1,5 +1,7 @@
 import type { components, operations } from '@/types/generated/api-schema';
 
+export type EventTag = components['schemas']['TagDto'];
+
 export type ListEventsParams =
   operations['EventController_findAll']['parameters']['query'];
 

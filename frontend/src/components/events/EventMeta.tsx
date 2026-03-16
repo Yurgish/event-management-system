@@ -5,6 +5,8 @@ import {
   UsersIcon,
 } from 'lucide-react';
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+
 interface EventMetaProps {
   dateTime: string;
   location: string;
@@ -41,8 +43,12 @@ function EventMeta({
         <span>participants</span>
       </p>
 
-      <p className="text-muted-foreground text-sm">
-        Organizer: {organizerName}
+      <p className="text-muted-foreground flex items-center gap-2">
+        Organizer:
+        <Avatar>
+          <AvatarFallback>{organizerName.charAt(0)}</AvatarFallback>
+        </Avatar>
+        {organizerName}
       </p>
     </div>
   );

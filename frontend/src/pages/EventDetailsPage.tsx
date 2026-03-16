@@ -7,8 +7,8 @@ import {
   EventJoinButton,
   EventMeta,
   EventParticipants,
+  EventTags,
 } from '@/components/events';
-import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -28,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks';
 import { getEventCapacityMeta } from '@/lib/event-capacity';
 import { getServerErrorMessage } from '@/lib/server-error';
@@ -73,6 +74,7 @@ function EventDetailsPage() {
     event._count.participants,
     event.capacity,
   );
+  const tags = event.tags ?? [];
   const isOwner = user?.id === event.organizerId;
 
   const handleDelete = async () => {
@@ -109,6 +111,8 @@ function EventDetailsPage() {
         </CardHeader>
 
         <CardContent className="space-y-4">
+          <EventTags tags={tags} />
+
           <EventMeta
             dateTime={event.dateTime}
             location={event.location}

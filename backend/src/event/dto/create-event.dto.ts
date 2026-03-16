@@ -1,6 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  ArrayMaxSize,
+  ArrayUnique,
+  IsArray,
   IsBoolean,
   IsDateString,
   IsInt,
@@ -47,4 +50,17 @@ export class CreateEventDto {
   @IsOptional()
   @IsBoolean()
   isPublic?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Tag ids linked to the event',
+    type: [String],
+    example: ['cm9tag00123', 'cm9tag00456'],
+    maxItems: 5,
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(5)
+  @ArrayUnique()
+  @IsString({ each: true })
+  tagIds?: string[];
 }

@@ -1,0 +1,32 @@
+enum TagColor {
+  slate
+  indigo
+  blue
+  sky
+  cyan
+  teal
+  emerald
+  lime
+  purple
+  pink
+  rose
+  red
+  orange
+  amber
+  green
+  yellow
+}
+
+model Tag {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  label           String
+  normalizedLabel String   @unique
+  color           TagColor
+  sortOrder       Int      @default(0)
+  isActive        Boolean  @default(true)
+
+  events EventTag[]
+
+  @@map("tags")
+}

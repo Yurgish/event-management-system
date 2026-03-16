@@ -36,6 +36,8 @@ import {
 } from '@/lib/event-form';
 import { cn } from '@/lib/utils';
 
+import TagsMultiSelectCombobox from './TagsMultiSelectCombobox';
+
 interface EventFormProps {
   mode: 'create' | 'edit';
   initialValues?: Partial<EventFormValues>;
@@ -168,16 +170,37 @@ function EventForm({
               </Field>
             </div>
 
-            <Field data-invalid={Boolean(errors.location)}>
-              <FieldLabel htmlFor="location">Location</FieldLabel>
-              <Input
-                id="location"
-                placeholder="Kyiv, Ukraine"
-                aria-invalid={Boolean(errors.location)}
-                {...register('location')}
-              />
-              <FieldError errors={[errors.location]} />
-            </Field>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Field className="flex-1" data-invalid={Boolean(errors.location)}>
+                <FieldLabel htmlFor="location">Location</FieldLabel>
+                <Input
+                  id="location"
+                  placeholder="Kyiv, Ukraine"
+                  aria-invalid={Boolean(errors.location)}
+                  {...register('location')}
+                />
+                <FieldError errors={[errors.location]} />
+              </Field>
+
+              <Field className="flex-1" data-invalid={Boolean(errors.tagIds)}>
+                <FieldLabel htmlFor="tagIds">Tags</FieldLabel>
+                <Controller
+                  control={control}
+                  name="tagIds"
+                  render={({ field }) => (
+                    <TagsMultiSelectCombobox
+                      id="tagIds"
+                      value={field.value ?? []}
+                      onValueChange={field.onChange}
+                      placeholder="Select tags"
+                      disabled={isDisabled}
+                    />
+                  )}
+                />
+                <FieldDescription>Optional, up to 5 tags.</FieldDescription>
+                <FieldError errors={[errors.tagIds]} />
+              </Field>
+            </div>
 
             <Field data-invalid={Boolean(errors.capacity)}>
               <FieldLabel htmlFor="capacity">

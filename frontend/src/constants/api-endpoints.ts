@@ -18,6 +18,7 @@ const API_PATH_TEMPLATES = {
   AUTH_LOGOUT: '/auth/logout',
   USERS_ME: '/users/me',
   USERS_ME_EVENTS: '/users/me/events',
+  TAGS: '/tags',
 } as const satisfies Record<string, ApiPathTemplate>;
 
 function resolveApiPath(
@@ -52,4 +53,5 @@ export const API_ENDPOINTS = {
   AUTH_LOGOUT: API_PATH_TEMPLATES.AUTH_LOGOUT,
   USERS_ME: API_PATH_TEMPLATES.USERS_ME,
   USERS_ME_EVENTS: API_PATH_TEMPLATES.USERS_ME_EVENTS,
+  TAGS: API_PATH_TEMPLATES.TAGS,
 } as const;

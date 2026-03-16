@@ -7,7 +7,7 @@ function AppLayout() {
     <div className="flex min-h-screen bg-gray-50">
       <Header />
 
-      <main className="layout-container py-8 pt-20">
+      <main className="layout-container pt-20">
         <Outlet />
       </main>
     </div>

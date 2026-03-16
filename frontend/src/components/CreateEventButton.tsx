@@ -1,8 +1,8 @@
 import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 
 interface CreateEventButtonProps {
   className?: string;

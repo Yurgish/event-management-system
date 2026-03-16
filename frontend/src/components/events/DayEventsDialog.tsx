@@ -39,7 +39,12 @@ function DayEventsDialog({
               | 'organized'
               | 'joined'
               | undefined;
-            const isOrganized = source === 'organized';
+            const eventTypeLabel =
+              source === 'organized' ? 'Your event' : 'You joined';
+            const tagColor =
+              (typeof event.backgroundColor === 'string' &&
+                event.backgroundColor) ||
+              '#64748b';
             const time = event.start
               ? new Date(event.start).toLocaleTimeString(undefined, {
                   hour: '2-digit',
@@ -58,18 +63,17 @@ function DayEventsDialog({
                 <span
                   className="size-2 shrink-0 rounded-full"
                   style={{
-                    backgroundColor: isOrganized ? '#059669' : '#0284c7',
+                    backgroundColor: tagColor,
                   }}
                 />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-medium">
                     {event.title}
                   </span>
-                  {time && (
-                    <span className="text-muted-foreground text-xs">
-                      {time}
-                    </span>
-                  )}
+                  <span className="text-muted-foreground block text-xs">
+                    {eventTypeLabel}
+                    {time ? ` • ${time}` : ''}
+                  </span>
                 </span>
               </Link>
             );
