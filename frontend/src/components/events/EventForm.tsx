@@ -182,14 +182,14 @@ function EventForm({
                 <FieldError errors={[errors.location]} />
               </Field>
 
-              <Field className="flex-1" data-invalid={Boolean(errors.tagIds)}>
-                <FieldLabel htmlFor="tagIds">Tags</FieldLabel>
+              <Field className="flex-1" data-invalid={Boolean(errors.tagSlugs)}>
+                <FieldLabel htmlFor="tagSlugs">Tags</FieldLabel>
                 <Controller
                   control={control}
-                  name="tagIds"
+                  name="tagSlugs"
                   render={({ field }) => (
                     <TagsMultiSelectCombobox
-                      id="tagIds"
+                      id="tagSlugs"
                       value={field.value ?? []}
                       onValueChange={field.onChange}
                       placeholder="Select tags"
@@ -198,7 +198,7 @@ function EventForm({
                   )}
                 />
                 <FieldDescription>Optional, up to 5 tags.</FieldDescription>
-                <FieldError errors={[errors.tagIds]} />
+                <FieldError errors={[errors.tagSlugs]} />
               </Field>
             </div>
 

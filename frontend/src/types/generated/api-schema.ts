@@ -194,6 +194,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/assistant/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask AI assistant (streaming text response) */
+        post: operations["AssistantController_askStream"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -322,13 +339,14 @@ export interface components {
              */
             isPublic: boolean;
             /**
-             * @description Tag ids linked to the event
+             * @description Tag slugs linked to the event
              * @example [
-             *       "cm9tag00123",
-             *       "cm9tag00456"
+             *       "javascript",
+             *       "web-dev",
+             *       "react"
              *     ]
              */
-            tagIds?: string[];
+            tagSlugs?: string[];
         };
         UpdateEventDto: {
             /** @example NestJS Workshop */
@@ -347,13 +365,14 @@ export interface components {
              */
             isPublic: boolean;
             /**
-             * @description Tag ids linked to the event
+             * @description Tag slugs linked to the event
              * @example [
-             *       "cm9tag00123",
-             *       "cm9tag00456"
+             *       "javascript",
+             *       "web-dev",
+             *       "react"
              *     ]
              */
-            tagIds?: string[];
+            tagSlugs?: string[];
         };
         ParticipantRecordDto: {
             /** @example cm8xabcd1234 */
@@ -433,6 +452,10 @@ export interface components {
             /** @example blue */
             color: string;
         };
+        AskAssistantDto: {
+            /** @example What events am I attending this week? */
+            question: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -451,8 +474,10 @@ export interface operations {
                 limit?: number;
                 /** @description Search by title, description or location */
                 search?: string;
-                /** @description Filter by tag ids */
+                /** @description Filter by tag ids (legacy, use tagSlugs instead) */
                 tags?: string[];
+                /** @description Filter by tag slugs */
+                tagSlugs?: string[];
             };
             header?: never;
             path?: never;
@@ -836,6 +861,27 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["TagResponseDto"][];
                 };
+            };
+        };
+    };
+    AssistantController_askStream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AskAssistantDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

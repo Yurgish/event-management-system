@@ -45,8 +45,8 @@ export class ListEventsQueryDto {
   search?: string;
 
   @ApiPropertyOptional({
-    description: 'Filter by tag ids',
-    example: ['cm9tag00123', 'cm9tag00456'],
+    description: 'Filter by tag slugs',
+    example: ['javascript', 'web-dev', 'react'],
     type: [String],
   })
   @Transform(({ value }) => {
@@ -64,5 +64,5 @@ export class ListEventsQueryDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  tags?: string[];
+  tagSlugs?: string[];
 }

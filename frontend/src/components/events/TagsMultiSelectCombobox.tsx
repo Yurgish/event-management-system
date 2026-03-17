@@ -40,23 +40,23 @@ function TagsMultiSelectCombobox({
   const anchor = useComboboxAnchor();
   const { data: tags = [], isFetching } = useGetTagsQuery();
 
-  const tagsById = useMemo(
-    () => new Map(tags.map((tag) => [tag.id, tag])),
+  const tagsBySlug = useMemo(
+    () => new Map(tags.map((tag) => [tag.slug, tag])),
     [tags],
   );
 
   const selectedTags = useMemo(
     () =>
       value
-        .map((id) => tagsById.get(id))
+        .map((slug) => tagsBySlug.get(slug))
         .filter((tag): tag is TagItem => Boolean(tag)),
-    [value, tagsById],
+    [value, tagsBySlug],
   );
 
   const isLimitReached = selectedTags.length >= MAX_SELECTED_TAGS;
 
   const handleValueChange = (nextSelectedTags: TagItem[]) => {
-    onValueChange(nextSelectedTags.map((tag) => tag.id));
+    onValueChange(nextSelectedTags.map((tag) => tag.slug));
   };
 
   return (

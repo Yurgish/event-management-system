@@ -24,7 +24,7 @@ export const eventFormSchema = yup.object({
     .matches(/^\d{2}:\d{2}$/, 'Please select a time')
     .required('Time is required'),
   location: yup.string().trim().required('Location is required'),
-  tagIds: yup
+  tagSlugs: yup
     .array()
     .of(yup.string().trim().required())
     .max(5, 'You can select up to 5 tags')
@@ -58,7 +58,7 @@ export function getEmptyEventFormValues(): Partial<EventFormValues> {
     description: '',
     time: '',
     location: '',
-    tagIds: [],
+    tagSlugs: [],
     visibility: 'public',
     capacity: undefined,
   };
@@ -86,7 +86,7 @@ export function getEventFormValuesFromEvent(
     date: dateTime,
     time: `${hours}:${minutes}`,
     location: event.location,
-    tagIds: event.tags?.map((tag) => tag.id) ?? [],
+    tagSlugs: event.tags?.map((tag) => tag.slug) ?? [],
     capacity: typeof event.capacity === 'number' ? event.capacity : undefined,
     visibility: event.isPublic ? 'public' : 'private',
   };
@@ -102,7 +102,7 @@ export function buildEventRequest(values: EventFormValues): CreateEventRequest {
     description: values.description,
     dateTime: dateTime.toISOString(),
     location: values.location,
-    tagIds: values.tagIds ?? [],
+    tagSlugs: values.tagSlugs ?? [],
     ...(values.capacity != null && { capacity: values.capacity }),
     isPublic: values.visibility === 'public',
   };

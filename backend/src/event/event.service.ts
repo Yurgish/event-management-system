@@ -83,9 +83,9 @@ export class EventService {
   }
 
   private buildWhereClause(query: ListEventsQueryDto): Prisma.EventWhereInput {
-    const { search, tags } = query;
+    const { search, tagSlugs } = query;
     const trimmed = search?.trim();
-    const requiredTagIds = Array.from(new Set(tags ?? []));
+    const requiredTagSlugs = Array.from(new Set(tagSlugs ?? []));
 
     return {
       isPublic: true,
@@ -96,55 +96,53 @@ export class EventService {
           { location: { contains: trimmed, mode: 'insensitive' } },
         ],
       }),
-      ...(requiredTagIds.length && {
-        AND: requiredTagIds.map((tagId) => ({
-          tags: { some: { tag: { id: tagId } } },
+      ...(requiredTagSlugs.length && {
+        AND: requiredTagSlugs.map((slug) => ({
+          tags: { some: { tag: { slug } } },
         })),
       }),
     };
   }
 
-  private async validateAndResolveTagIds(tagIds?: string[]) {
-    if (tagIds === undefined) {
+  private async validateAndResolveTagSlugs(slugs?: string[]) {
+    if (slugs === undefined) {
       return undefined;
     }
 
-    const normalizedTagIds = tagIds.map((tagId) => tagId.trim());
+    const normalizedSlugs = slugs.map((s) => s.trim().toLowerCase());
 
-    if (normalizedTagIds.some((tagId) => tagId.length === 0)) {
-      throw new BadRequestException('tagIds must contain non-empty values');
+    if (normalizedSlugs.some((s) => s.length === 0)) {
+      throw new BadRequestException('tagSlugs must contain non-empty values');
     }
 
-    const uniqueTagIds = Array.from(new Set(normalizedTagIds));
+    const uniqueSlugs = Array.from(new Set(normalizedSlugs));
 
-    if (uniqueTagIds.length !== normalizedTagIds.length) {
-      throw new BadRequestException('tagIds must be unique');
+    if (uniqueSlugs.length !== normalizedSlugs.length) {
+      throw new BadRequestException('tagSlugs must be unique');
     }
 
-    if (uniqueTagIds.length === 0) {
+    if (uniqueSlugs.length === 0) {
       return [];
     }
 
     const foundTags = await this.prismaService.tag.findMany({
       where: {
-        id: { in: uniqueTagIds },
+        slug: { in: uniqueSlugs },
         isActive: true,
       },
-      select: { id: true },
+      select: { id: true, slug: true },
     });
 
-    const foundTagIds = new Set(foundTags.map((tag) => tag.id));
-    const missingTagIds = uniqueTagIds.filter(
-      (tagId) => !foundTagIds.has(tagId),
-    );
+    const foundSlugs = new Set(foundTags.map((tag) => tag.slug));
+    const missingSlugs = uniqueSlugs.filter((s) => !foundSlugs.has(s));
 
-    if (missingTagIds.length > 0) {
+    if (missingSlugs.length > 0) {
       throw new BadRequestException(
-        `Unknown or inactive tagIds: ${missingTagIds.join(', ')}`,
+        `Unknown or inactive tagSlugs: ${missingSlugs.join(', ')}`,
       );
     }
 
-    return uniqueTagIds;
+    return foundTags.map((tag) => tag.id);
   }
 
   async findAllPublic(query: ListEventsQueryDto, userId?: string) {
@@ -209,8 +207,8 @@ export class EventService {
       throw new BadRequestException('Event date must be in the future');
     }
 
-    const { dateTime, tagIds, ...rest } = dto;
-    const resolvedTagIds = await this.validateAndResolveTagIds(tagIds);
+    const { dateTime, tagSlugs, ...rest } = dto;
+    const resolvedTagIds = await this.validateAndResolveTagSlugs(tagSlugs);
 
     return this.prismaService.event.create({
       data: {
@@ -237,8 +235,8 @@ export class EventService {
       throw new BadRequestException('Event date must be in the future');
     }
 
-    const { dateTime, tagIds, ...rest } = patch;
-    const resolvedTagIds = await this.validateAndResolveTagIds(tagIds);
+    const { dateTime, tagSlugs, ...rest } = patch;
+    const resolvedTagIds = await this.validateAndResolveTagSlugs(tagSlugs);
 
     return this.prismaService.event.update({
       where: { id },

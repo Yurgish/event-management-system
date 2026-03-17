@@ -8,6 +8,7 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { UserModule } from '@/user/user.module';
 
 import { TagsModule } from './tags/tags.module';
+import { AssistantModule } from './assistant/assistant.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TagsModule } from './tags/tags.module';
     AuthModule,
     UserModule,
     TagsModule,
+    AssistantModule,
   ],
   controllers: [AppController],
 })

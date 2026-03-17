@@ -30,8 +30,8 @@ function buildListEventsQueryParams(params?: ListEventsParams | void) {
     queryParams.set('search', params.search.trim());
   }
 
-  for (const tagId of params.tags ?? []) {
-    queryParams.append('tags', tagId);
+  for (const tagSlug of params.tags ?? []) {
+    queryParams.append('tagSlugs', tagSlug);
   }
 
   return queryParams;

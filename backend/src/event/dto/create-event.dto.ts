@@ -52,9 +52,9 @@ export class CreateEventDto {
   isPublic?: boolean;
 
   @ApiPropertyOptional({
-    description: 'Tag ids linked to the event',
+    description: 'Tag slugs linked to the event',
     type: [String],
-    example: ['cm9tag00123', 'cm9tag00456'],
+    example: ['javascript', 'web-dev', 'react'],
     maxItems: 5,
   })
   @IsOptional()
@@ -62,5 +62,5 @@ export class CreateEventDto {
   @ArrayMaxSize(5)
   @ArrayUnique()
   @IsString({ each: true })
-  tagIds?: string[];
+  tagSlugs?: string[];
 }
