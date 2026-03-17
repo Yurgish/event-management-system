@@ -8,6 +8,7 @@ import {
 
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import type { RootState } from '@/store';
+import { clearAssistantChatHistory } from '@/store/assistantChatStore';
 import { clearCredentials, setCredentials } from '@/store/slices/authSlice';
 import type { AuthResponse } from '@/types/api/auth';
 
@@ -62,6 +63,7 @@ async function refreshAccessToken(
   }
 
   // Refresh token is invalid or expired — force logout
+  clearAssistantChatHistory();
   api.dispatch(clearCredentials());
   api.dispatch(baseApi.util.resetApiState());
   return null;

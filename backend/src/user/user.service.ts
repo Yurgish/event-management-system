@@ -95,4 +95,52 @@ export class UserService {
       }),
     };
   }
+
+  async findMyEventsForAssistant(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const events = await this.prismaService.event.findMany({
+      where: {
+        OR: [{ organizerId: userId }, { participants: { some: { userId } } }],
+      },
+      select: {
+        id: true,
+        title: true,
+        dateTime: true,
+        location: true,
+        organizerId: true,
+        tags: {
+          select: {
+            tag: {
+              select: {
+                slug: true,
+                label: true,
+                color: true,
+              },
+            },
+          },
+          orderBy: { tag: { sortOrder: 'asc' } },
+        },
+      },
+      orderBy: { dateTime: 'asc' },
+    });
+
+    return {
+      events: events.map((event) => ({
+        id: event.id,
+        title: event.title,
+        dateTime: event.dateTime,
+        location: event.location,
+        organizerId: event.organizerId,
+        tags: event.tags.map(({ tag }) => tag),
+      })),
+    };
+  }
 }

@@ -36,7 +36,9 @@ export class AssistantController {
         user.id,
         dto.question,
       );
-      result.pipeUIMessageStreamToResponse(res);
+      result.pipeUIMessageStreamToResponse(res, {
+        onError: () => FALLBACK_MESSAGE,
+      });
     } catch {
       res.status(500).send(FALLBACK_MESSAGE);
     }

@@ -12,6 +12,7 @@ import PageFallback from '@/router/PageFallback';
  */
 const CreateEventPage = lazy(() => import('@/pages/CreateEventPage'));
 const EditEventPage = lazy(() => import('@/pages/EditEventPage'));
+const AssistantPage = lazy(() => import('@/pages/AssistantPage'));
 const EventDetailsPage = lazy(() => import('@/pages/EventDetailsPage'));
 const EventsPage = lazy(() => import('@/pages/EventsPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoutes />,
         children: [
+          {
+            path: ROUTE_PATHS.ASSISTANT,
+            element: withPageLoader(<AssistantPage />),
+          },
           {
             path: ROUTE_PATHS.CREATE_EVENT,
             element: withPageLoader(<CreateEventPage />),

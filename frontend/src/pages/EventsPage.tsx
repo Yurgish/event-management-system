@@ -54,7 +54,9 @@ function EventsPage() {
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Events</h1>
+        <h1 className="text-xl font-semibold tracking-tight sm:text-3xl">
+          Events
+        </h1>
         <p className="text-muted-foreground max-w-2xl text-sm sm:text-base">
           Browse public events, join what you like, or open full event details.
         </p>

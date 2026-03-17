@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { baseApi } from '@/store/api/baseApi';
+import { clearAssistantChatHistory } from '@/store/assistantChatStore';
 import { clearCredentials, setCredentials } from '@/store/slices/authSlice';
 import type {
   AuthResponse,
@@ -54,6 +55,7 @@ export const authApi = baseApi.injectEndpoints({
         try {
           await queryFulfilled;
         } finally {
+          clearAssistantChatHistory();
           dispatch(clearCredentials());
           dispatch(baseApi.util.resetApiState());
         }

@@ -7,6 +7,7 @@ type RouteParam = string | number;
 export const ROUTE_PATHS = {
   ROOT: '/',
   EVENTS: 'events',
+  ASSISTANT: 'assistant',
   EVENT_DETAILS: 'events/:id',
   CREATE_EVENT: 'create-event',
   MY_EVENTS: 'my-events',
@@ -22,6 +23,7 @@ export const ROUTE_PATHS = {
 export const APP_ROUTES = {
   ROOT: '/',
   EVENTS: '/events',
+  ASSISTANT: '/assistant',
   EVENT_DETAILS: (id: RouteParam) => `/events/${id}`,
   EVENT_EDIT: (id: RouteParam) => `/events/${id}/edit`,
   CREATE_EVENT: '/create-event',
