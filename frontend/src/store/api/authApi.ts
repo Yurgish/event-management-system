@@ -32,6 +32,7 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         const { data } = await queryFulfilled;
         dispatch(setCredentials(data));
+        clearAssistantChatHistory();
       },
       invalidatesTags: ['Auth', 'User', 'MyEvents'],
     }),

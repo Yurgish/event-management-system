@@ -129,6 +129,29 @@ export function buildEventTools(
       },
     }),
 
+    search_events: tool({
+      description:
+        'Search public events by text query OR by date range (or both).Use this to find ANY public events on a specific date or date range. Examples: "events on April 3rd", "events next week", "events this weekend".Always pass fromIso and toIso when user asks about a specific time period.',
+      inputSchema: schema.object({
+        query: schema.string().default(''),
+        page: schema.number().int().min(1).default(1),
+        fromIso: schema.string().optional(),
+        toIso: schema.string().optional(),
+        limit: schema.number().int().min(1).max(50).default(10),
+      }),
+      execute: async ({ query, fromIso, toIso, page, limit }) => {
+        const result = await eventService.findAllPublic({
+          search: query,
+          page,
+          limit,
+          fromDate: fromIso,
+          toDate: toIso,
+        });
+
+        return { total: result.items.length, items: result.items };
+      },
+    }),
+
     list_my_events: tool({
       description:
         'List user events by mode and optional date range or human tag queries. Modes: all, organized, attending, upcoming, past. Supports queries like backend, tech, design, marketing.',
@@ -189,7 +212,7 @@ export function buildEventTools(
 
     list_public_events_by_tags: tool({
       description:
-        'List public events using human tag queries or slugs and optional date range. Handles case-insensitive input and aliases like tech -> technology.',
+        'List public events using human tag queries or slugs and optional date range. Handles case-insensitive input and aliases like tech -> technology. If no events found, you should call search_events with the same query as a fallback. If the user asks for events "this weekend", "this week", "next week" etc, you MUST calculate and pass fromIso and toIso date filters. Do not fetch all events and filter mentally — always use date params. Returns empty items array if no events found for that period.',
       inputSchema: schema.object({
         tagQueries: schema.array(schema.string().min(1)).min(1),
         fromIso: schema.string().optional(),
@@ -199,6 +222,10 @@ export function buildEventTools(
       execute: async ({ tagQueries, fromIso, toIso: toDateStr, limit }) => {
         const { matchedSlugs, matchedTags, unresolvedQueries } =
           await tagsService.resolveTagQueries(tagQueries);
+
+        console.log('tagQueries:', tagQueries);
+        console.log('matchedSlugs:', matchedSlugs);
+        console.log('unresolvedQueries:', unresolvedQueries);
 
         if (matchedSlugs.length === 0) {
           return {
@@ -217,6 +244,8 @@ export function buildEventTools(
           },
           userId,
         );
+
+        console.log('found events:', data.items.length);
 
         const from = parseDateOrUndefined(fromIso);
         const to = parseDateOrUndefined(toDateStr);

@@ -52,7 +52,8 @@ export function buildParticipantTools(
 ) {
   return {
     get_event_participants: tool({
-      description: 'Get participants for a given event title.',
+      description:
+        'Get the list of participants for a specific event. Use when user asks: - "Who is attending X?" - "Who joined X?" - "Participants of X" - "How many people are going to X?" Pass the event title (full or partial).',
       inputSchema: z.object({
         title: z.string().min(1),
       }),

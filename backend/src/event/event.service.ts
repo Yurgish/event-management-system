@@ -83,7 +83,7 @@ export class EventService {
   }
 
   private buildWhereClause(query: ListEventsQueryDto): Prisma.EventWhereInput {
-    const { search, tagSlugs } = query;
+    const { search, tagSlugs, fromDate, toDate } = query;
     const trimmed = search?.trim();
     const requiredTagSlugs = Array.from(new Set(tagSlugs ?? []));
 
@@ -100,6 +100,12 @@ export class EventService {
         AND: requiredTagSlugs.map((slug) => ({
           tags: { some: { tag: { slug } } },
         })),
+      }),
+      ...((fromDate || toDate) && {
+        dateTime: {
+          ...(fromDate && { gte: new Date(fromDate) }),
+          ...(toDate && { lte: new Date(toDate) }),
+        },
       }),
     };
   }

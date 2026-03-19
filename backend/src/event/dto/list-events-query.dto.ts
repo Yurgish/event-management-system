@@ -2,6 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
+  IsDateString,
   IsInt,
   IsOptional,
   IsString,
@@ -65,4 +66,12 @@ export class ListEventsQueryDto {
   @IsArray()
   @IsString({ each: true })
   tagSlugs?: string[];
+
+  @IsOptional()
+  @IsDateString()
+  fromDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  toDate?: string;
 }
