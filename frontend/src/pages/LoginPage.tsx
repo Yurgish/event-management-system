@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as yup from 'yup';
 
-import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -21,6 +20,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { APP_ROUTES } from '@/constants/routes';
 import { getServerErrorMessage } from '@/lib/server-error';
 import { useLoginMutation } from '@/store/api';
 

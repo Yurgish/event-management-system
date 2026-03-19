@@ -47,9 +47,13 @@ export interface UseMyEventsCalendarResult {
   handleViewChange: (view: CalendarViewMode) => void;
 }
 
+type MyEventCalendarItem = MyEventsResponse['events'][number];
+
 type DayCellElement = HTMLElement & {
   __myEventsDayClickHandler?: (ev: MouseEvent) => void;
 };
+
+const FALLBACK_TAG_COLOR = '#64748b';
 
 function getDayKey(date: Date) {
   const year = date.getFullYear();
@@ -59,7 +63,7 @@ function getDayKey(date: Date) {
 }
 
 function toCalendarEvent(
-  event: { id: string; title: string; dateTime: string },
+  event: MyEventCalendarItem,
   source: 'organized' | 'joined',
   color: string,
 ): EventInput {
@@ -77,6 +81,7 @@ function toCalendarEvent(
     extendedProps: {
       eventId: event.id,
       source,
+      tagColor: color,
     },
   };
 }
@@ -97,6 +102,7 @@ function toCalendarEvent(
  */
 export function useMyEventsCalendar(
   data?: MyEventsResponse,
+  currentUserId?: string,
 ): UseMyEventsCalendarResult {
   const navigate = useNavigate();
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -126,41 +132,32 @@ export function useMyEventsCalendar(
     };
   }, []);
 
-  // Merge organized and joined events into one calendar feed without duplicates.
+  // Build calendar events with tag-driven colors.
   const calendarEvents = useMemo<EventInput[]>(() => {
     if (!data) {
       return [];
     }
 
-    const byEventId = new Map<string, EventInput>();
+    return data.events.map((event) => {
+      const source =
+        currentUserId && event.organizerId === currentUserId
+          ? 'organized'
+          : 'joined';
+      const rawColor = event.firstTagColor as unknown;
+      const color =
+        typeof rawColor === 'string' && rawColor.trim().length > 0
+          ? rawColor
+          : FALLBACK_TAG_COLOR;
 
-    for (const event of data.organizedEvents) {
-      byEventId.set(event.id, toCalendarEvent(event, 'organized', '#059669'));
-    }
+      return toCalendarEvent(event, source, color);
+    });
+  }, [data, currentUserId]);
 
-    for (const participation of data.participations) {
-      const event = participation.event;
-
-      if (byEventId.has(event.id)) {
-        continue;
-      }
-
-      byEventId.set(event.id, toCalendarEvent(event, 'joined', '#0284c7'));
-    }
-
-    return Array.from(byEventId.values());
-  }, [data]);
-
-  // Build a per-day source map used for mobile day cell coloring.
-  const mobileDaySourceByDate = useMemo(() => {
-    const daySources = new Map<string, Set<'organized' | 'joined'>>();
+  // Build a per-day tag color map used for mobile day cell coloring.
+  const mobileDayColorsByDate = useMemo(() => {
+    const dayColors = new Map<string, string[]>();
 
     for (const event of calendarEvents) {
-      const source = event.extendedProps?.source;
-      if (source !== 'organized' && source !== 'joined') {
-        continue;
-      }
-
       if (!event.start) {
         continue;
       }
@@ -184,12 +181,19 @@ export function useMyEventsCalendar(
       }
 
       const key = getDayKey(date);
-      const existing = daySources.get(key) ?? new Set<'organized' | 'joined'>();
-      existing.add(source);
-      daySources.set(key, existing);
+      const eventColor =
+        (typeof event.backgroundColor === 'string' && event.backgroundColor) ||
+        FALLBACK_TAG_COLOR;
+      const existing = dayColors.get(key) ?? [];
+
+      if (!existing.includes(eventColor)) {
+        existing.push(eventColor);
+      }
+
+      dayColors.set(key, existing);
     }
 
-    return daySources;
+    return dayColors;
   }, [calendarEvents]);
 
   // Desktop click opens event details, mobile keeps day-driven interaction model.
@@ -228,26 +232,29 @@ export function useMyEventsCalendar(
       return [];
     }
 
-    const daySources = mobileDaySourceByDate.get(getDayKey(date));
-    if (!daySources || daySources.size === 0) {
+    const dayColors = mobileDayColorsByDate.get(getDayKey(date));
+    if (!dayColors || dayColors.length === 0) {
       return [];
     }
 
-    if (daySources.has('organized') && daySources.has('joined')) {
-      return ['my-events-day-mixed'];
-    }
-
-    if (daySources.has('organized')) {
-      return ['my-events-day-organized'];
-    }
-
-    return ['my-events-day-joined'];
+    return dayColors.length > 1
+      ? ['my-events-day-tag', 'my-events-day-tag-mixed']
+      : ['my-events-day-tag'];
   };
 
   // FullCalendar does not provide built-in mobile day click UX for this flow,
   // so we attach a click listener manually and clean it up on unmount.
   const handleDayCellDidMount = (arg: DayCellMountArg) => {
     const dayCellEl = arg.el as DayCellElement;
+    const dayColors = mobileDayColorsByDate.get(getDayKey(arg.date));
+
+    if (dayColors && dayColors.length > 0) {
+      const primary = dayColors[0] ?? FALLBACK_TAG_COLOR;
+      const secondary = dayColors[1] ?? primary;
+
+      dayCellEl.style.setProperty('--my-events-day-color-primary', primary);
+      dayCellEl.style.setProperty('--my-events-day-color-secondary', secondary);
+    }
 
     const onClick = () => {
       if (!window.matchMedia('(max-width: 640px)').matches) {
@@ -296,6 +303,8 @@ export function useMyEventsCalendar(
 
   const handleDayCellWillUnmount = (arg: DayCellMountArg) => {
     const dayCellEl = arg.el as DayCellElement;
+    dayCellEl.style.removeProperty('--my-events-day-color-primary');
+    dayCellEl.style.removeProperty('--my-events-day-color-secondary');
 
     if (dayCellEl.__myEventsDayClickHandler) {
       dayCellEl.removeEventListener(

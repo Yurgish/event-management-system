@@ -8,6 +8,7 @@ type ApiParamValue = string | number;
  * If backend routes change, TypeScript will fail here first.
  */
 const API_PATH_TEMPLATES = {
+  ASSISTANT_ASK: '/assistant/ask',
   EVENTS: '/events',
   EVENT_BY_ID: '/events/{id}',
   EVENT_JOIN: '/events/{id}/join',
@@ -18,6 +19,7 @@ const API_PATH_TEMPLATES = {
   AUTH_LOGOUT: '/auth/logout',
   USERS_ME: '/users/me',
   USERS_ME_EVENTS: '/users/me/events',
+  TAGS: '/tags',
 } as const satisfies Record<string, ApiPathTemplate>;
 
 function resolveApiPath(
@@ -39,6 +41,7 @@ function resolveApiPath(
  * Use this object in API slices to avoid hardcoded endpoint strings.
  */
 export const API_ENDPOINTS = {
+  ASSISTANT_ASK: API_PATH_TEMPLATES.ASSISTANT_ASK,
   EVENTS: API_PATH_TEMPLATES.EVENTS,
   EVENT_BY_ID: (id: ApiParamValue) =>
     resolveApiPath(API_PATH_TEMPLATES.EVENT_BY_ID, { id }),
@@ -52,4 +55,5 @@ export const API_ENDPOINTS = {
   AUTH_LOGOUT: API_PATH_TEMPLATES.AUTH_LOGOUT,
   USERS_ME: API_PATH_TEMPLATES.USERS_ME,
   USERS_ME_EVENTS: API_PATH_TEMPLATES.USERS_ME_EVENTS,
+  TAGS: API_PATH_TEMPLATES.TAGS,
 } as const;

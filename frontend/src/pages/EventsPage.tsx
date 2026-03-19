@@ -1,12 +1,15 @@
-import { Loader2Icon, SearchIcon, XIcon } from 'lucide-react';
+import { SearchIcon, XIcon } from 'lucide-react';
 
 import {
   EventCard,
   EventCardSkeleton,
   EventsPagination,
+  TagsMultiSelectCombobox,
 } from '@/components/events';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { InputGroup, InputGroupInput } from '@/components/ui/input-group';
+import { Spinner } from '@/components/ui/spinner';
 import { useEventsFilters } from '@/hooks';
 import { cn } from '@/lib/utils';
 import { useGetEventsQuery } from '@/store/api';
@@ -14,13 +17,22 @@ import { useGetEventsQuery } from '@/store/api';
 const PAGE_LIMIT = 6;
 
 function EventsPage() {
-  const { page, search, searchValue, setSearchValue, setSearch, clearSearch } =
-    useEventsFilters();
+  const {
+    page,
+    search,
+    tags,
+    searchValue,
+    setSearchValue,
+    setSearch,
+    setTags,
+    clearFilters,
+  } = useEventsFilters();
 
   const { data, isError, isLoading, isFetching } = useGetEventsQuery({
     page,
     limit: PAGE_LIMIT,
     ...(search ? { search } : {}),
+    ...(tags.length ? { tags } : {}),
   });
 
   const showSkeletons = isLoading && !data;
@@ -42,42 +54,53 @@ function EventsPage() {
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Events</h1>
+        <h1 className="text-xl font-semibold tracking-tight sm:text-3xl">
+          Events
+        </h1>
         <p className="text-muted-foreground max-w-2xl text-sm sm:text-base">
           Browse public events, join what you like, or open full event details.
         </p>
       </div>
 
-      <form
-        onSubmit={handleSearchSubmit}
-        className="xs:flex-row flex flex-col gap-2 md:max-w-[32rem]"
-      >
-        <div className="relative flex-1">
-          <SearchIcon className="text-muted-foreground absolute top-2 left-3 size-4" />
-          <Input
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Search by title, description, or location"
-            className="pl-9"
-          />
-        </div>
+      <div className="md:max-w-[40rem]">
+        <form onSubmit={handleSearchSubmit}>
+          <div className="xs:flex-row flex flex-col gap-2">
+            <ButtonGroup className="w-full flex-1">
+              <InputGroup className="flex-1">
+                <InputGroupInput
+                  id="events-search"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  placeholder="Search by title, description, or location"
+                />
+              </InputGroup>
 
-        <Button type="submit" disabled={isFetching}>
-          {isRefetching ? (
-            <Loader2Icon className="size-4 animate-spin" />
-          ) : (
-            <SearchIcon className="size-4" />
-          )}
-          Search
-        </Button>
+              <Button type="submit" disabled={isFetching}>
+                {isRefetching ? (
+                  <Spinner className="text-muted-foreground" />
+                ) : (
+                  <SearchIcon className="size-4" />
+                )}
+              </Button>
+            </ButtonGroup>
 
-        {search && (
-          <Button type="button" variant="outline" onClick={clearSearch}>
-            <XIcon className="size-4" />
-            Clear
-          </Button>
-        )}
-      </form>
+            <TagsMultiSelectCombobox
+              id="events-tags-filter"
+              value={tags}
+              onValueChange={setTags}
+              placeholder="Filter by tags"
+              className="flex-1"
+            />
+
+            {(search || tags.length > 0) && (
+              <Button type="button" variant="outline" onClick={clearFilters}>
+                <XIcon className="size-4" />
+                Clear
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
 
       {showSkeletons ? (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -111,7 +134,9 @@ function EventsPage() {
       ) : (
         <div className="bg-card rounded-xl border p-6">
           <p className="text-muted-foreground">
-            {search ? 'No events match your search.' : 'No events found.'}
+            {search || tags.length > 0
+              ? 'No events match selected filters.'
+              : 'No events found.'}
           </p>
         </div>
       )}

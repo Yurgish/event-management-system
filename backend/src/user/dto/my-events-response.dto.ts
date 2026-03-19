@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import {
-  ParticipationResponseDto,
-  UserEventCalendarItemDto,
-} from '@/user/dto/user-event-calendar-item.dto';
+import { UserEventCalendarItemDto } from '@/user/dto/user-event-calendar-item.dto';
 
 export class UserResponseDto {
   @ApiProperty({ example: 'cm123abc' })
@@ -18,8 +15,5 @@ export class UserResponseDto {
 
 export class MyEventsResponseDto {
   @ApiProperty({ type: [UserEventCalendarItemDto] })
-  organizedEvents: UserEventCalendarItemDto[];
-
-  @ApiProperty({ type: [ParticipationResponseDto] })
-  participations: ParticipationResponseDto[];
+  events: UserEventCalendarItemDto[];
 }

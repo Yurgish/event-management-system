@@ -1,11 +1,11 @@
-import { Calendar, List, LogOutIcon } from 'lucide-react';
+import { Bot, Calendar, List, LogOutIcon } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import CreateEventButton from '@/components/CreateEventButton';
-import { APP_ROUTES } from '@/constants/routes';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks';
 import { useLogoutMutation } from '@/store/api';
 
@@ -22,6 +22,12 @@ const AuthenticatedActions = ({
 }: AuthenticatedActionsProps) => (
   <>
     <Button asChild variant="ghost" size="lg">
+      <Link to={APP_ROUTES.ASSISTANT}>
+        <Bot />
+        <span className="hidden sm:inline">Assistant</span>
+      </Link>
+    </Button>
+    <Button asChild variant="ghost" size="lg">
       <Link to={APP_ROUTES.MY_EVENTS}>
         <Calendar />
         <span className="hidden sm:inline">My Events</span>
@@ -33,7 +39,7 @@ const AuthenticatedActions = ({
       <Avatar>
         <AvatarFallback>{user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
-      <span className="hidden text-sm font-medium sm:inline">{user?.name}</span>
+      <span className="hidden text-sm font-medium md:inline">{user?.name}</span>
     </div>
     <Button
       variant="ghost"

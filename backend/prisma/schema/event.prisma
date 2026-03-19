@@ -1,0 +1,18 @@
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  dateTime    DateTime
+  location    String
+  capacity    Int?
+  isPublic    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  organizerId String
+  organizer   User @relation("Organizer", fields: [organizerId], references: [id], onDelete: Cascade)
+
+  participants Participant[]
+  tags         EventTag[]
+
+  @@map("events")
+}

@@ -4,8 +4,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { EventForm } from '@/components/events';
-import { APP_ROUTES } from '@/constants/routes';
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 import {
   buildEventRequest,
   type EventFormValues,

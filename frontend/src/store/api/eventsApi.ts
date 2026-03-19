@@ -11,18 +11,43 @@ import type {
   UpdateEventRequest,
 } from '@/types/api/events';
 
+function buildListEventsQueryParams(params?: ListEventsParams | void) {
+  if (!params) {
+    return undefined;
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params.page) {
+    queryParams.set('page', String(params.page));
+  }
+
+  if (params.limit) {
+    queryParams.set('limit', String(params.limit));
+  }
+
+  if (params.search?.trim()) {
+    queryParams.set('search', params.search.trim());
+  }
+
+  for (const tagSlug of params.tags ?? []) {
+    queryParams.append('tagSlugs', tagSlug);
+  }
+
+  return queryParams;
+}
+
 export const eventsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getEvents: builder.query<PaginatedEventsResponse, ListEventsParams | void>({
-      query: (params) =>
-        params
-          ? {
-              url: API_ENDPOINTS.EVENTS,
-              params,
-            }
-          : {
-              url: API_ENDPOINTS.EVENTS,
-            },
+      query: (params) => {
+        const queryParams = buildListEventsQueryParams(params);
+
+        return {
+          url: API_ENDPOINTS.EVENTS,
+          ...(queryParams ? { params: queryParams } : {}),
+        };
+      },
       providesTags: (result) =>
         result
           ? [

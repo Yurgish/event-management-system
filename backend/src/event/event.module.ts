@@ -8,5 +8,6 @@ import { ParticipantModule } from '@/participant/participant.module';
   imports: [ParticipantModule],
   controllers: [EventController],
   providers: [EventService],
+  exports: [EventService],
 })
 export class EventModule {}

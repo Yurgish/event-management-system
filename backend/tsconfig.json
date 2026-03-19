@@ -15,7 +15,10 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@prisma/*": ["prisma/*"],
+      "@prisma-seed/*": ["prisma/seed/*"],
+      "@generated/*": ["generated/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
