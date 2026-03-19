@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-/** Minimal event shape for a calendar cell — organizer's own events. */
 export class UserEventCalendarItemDto {
   @ApiProperty({ example: 'cm8xabcd1234' })
   id: string;
@@ -13,18 +12,10 @@ export class UserEventCalendarItemDto {
 
   @ApiProperty({ example: 'Kyiv, Ukraine' })
   location: string;
-}
 
-/** Calendar shape for events the user joined — also carries the organizer id. */
-export class JoinedEventCalendarItemDto extends UserEventCalendarItemDto {
   @ApiProperty({ example: 'cm8xorganizer1234' })
   organizerId: string;
-}
 
-export class ParticipationResponseDto {
-  @ApiProperty({ example: '2026-06-10T10:00:00.000Z', format: 'date-time' })
-  joinedAt: string;
-
-  @ApiProperty({ type: () => JoinedEventCalendarItemDto })
-  event: JoinedEventCalendarItemDto;
+  @ApiProperty({ example: '#3B82F6', nullable: true })
+  firstTagColor: string | null;
 }

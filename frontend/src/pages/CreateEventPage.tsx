@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 
 import { EventForm } from '@/components/events';
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 import { buildEventRequest, type EventFormValues } from '@/lib/event-form';
 import { getServerErrorMessage } from '@/lib/server-error';
 import { useCreateEventMutation } from '@/store/api';
@@ -18,7 +19,7 @@ function CreateEventPage() {
         buildEventRequest(values),
       ).unwrap();
       toast.success('Event created successfully');
-      navigate(`/events/${event.id}`);
+      navigate(APP_ROUTES.EVENT_DETAILS(event.id));
     } catch (error) {
       toast.error(
         getServerErrorMessage(
@@ -32,7 +33,7 @@ function CreateEventPage() {
   return (
     <section className="mx-auto flex min-h-[calc(100vh-7rem)] max-w-lg flex-col justify-center gap-3">
       <Button asChild variant="ghost" className="w-fit">
-        <Link to="/events">
+        <Link to={APP_ROUTES.EVENTS}>
           <ArrowLeftIcon className="size-4" />
           Back to Events
         </Link>

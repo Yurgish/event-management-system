@@ -7,6 +7,9 @@ import { EventModule } from '@/event/event.module';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { UserModule } from '@/user/user.module';
 
+import { TagsModule } from './tags/tags.module';
+import { AssistantModule } from './assistant/assistant.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -14,6 +17,8 @@ import { UserModule } from '@/user/user.module';
     EventModule,
     AuthModule,
     UserModule,
+    TagsModule,
+    AssistantModule,
   ],
   controllers: [AppController],
 })

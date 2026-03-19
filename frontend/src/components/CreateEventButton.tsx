@@ -2,6 +2,7 @@ import { Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 
 interface CreateEventButtonProps {
   className?: string;
@@ -16,7 +17,7 @@ function CreateEventButton({
 }: CreateEventButtonProps) {
   return (
     <Button asChild variant={variant} size={size} className={className}>
-      <Link to="/create-event">
+      <Link to={APP_ROUTES.CREATE_EVENT}>
         <Plus />
         <span className="hidden sm:inline">Create Event</span>
       </Link>

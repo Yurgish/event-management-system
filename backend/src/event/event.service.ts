@@ -1,21 +1,29 @@
 import {
   BadRequestException,
-  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Prisma } from 'generated/prisma/client';
 
 import {
   buildPaginatedResult,
   getPaginationParams,
 } from '@/common/utils/pagination.util';
-import {
-  CreateEventDto,
-  ListEventsQueryDto,
-  UpdateEventDto,
-} from '@/event/dto';
+import { CreateEventDto } from '@/event/dto/create-event.dto';
+import { ListEventsQueryDto } from '@/event/dto/list-events-query.dto';
+import { UpdateEventDto } from '@/event/dto/update-event.dto';
+import { ParticipantService } from '@/participant/participant.service';
 import { PrismaService } from '@/prisma/prisma.service';
+
+const TAG_SELECT = {
+  select: {
+    tag: {
+      select: { id: true, slug: true, label: true, color: true },
+    },
+  },
+  orderBy: { tag: { sortOrder: 'asc' as const } },
+} as const;
 
 /** Used for list, create, update — no participant list, only count. */
 const EVENT_SUMMARY_SELECT = {
@@ -32,9 +40,15 @@ const EVENT_SUMMARY_SELECT = {
   _count: { select: { participants: true } },
 } as const;
 
-/** Used for single-event detail — includes full participant list. */
-const EVENT_SELECT = {
+const EVENT_PUBLIC_LIST_SELECT = {
   ...EVENT_SUMMARY_SELECT,
+  tags: TAG_SELECT,
+} as const;
+
+/** Used for single-event detail — includes full participant list. */
+const EVENT_DETAIL_SELECT = {
+  ...EVENT_SUMMARY_SELECT,
+  tags: TAG_SELECT,
   participants: {
     select: {
       userId: true,
@@ -46,48 +60,107 @@ const EVENT_SELECT = {
 
 @Injectable()
 export class EventService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly participantService: ParticipantService,
+  ) {}
 
-  private buildPublicWhereClause(search?: string) {
+  private async findEventForParticipationOrThrow(eventId: string) {
+    const event = await this.prismaService.event.findUnique({
+      where: { id: eventId },
+      select: {
+        id: true,
+        capacity: true,
+        _count: { select: { participants: true } },
+      },
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    return event;
+  }
+
+  private buildWhereClause(query: ListEventsQueryDto): Prisma.EventWhereInput {
+    const { search, tagSlugs, fromDate, toDate } = query;
+    const trimmed = search?.trim();
+    const requiredTagSlugs = Array.from(new Set(tagSlugs ?? []));
+
     return {
       isPublic: true,
-      ...(search?.trim()
-        ? {
-            OR: [
-              {
-                title: {
-                  contains: search.trim(),
-                  mode: 'insensitive' as const,
-                },
-              },
-              {
-                description: {
-                  contains: search.trim(),
-                  mode: 'insensitive' as const,
-                },
-              },
-              {
-                location: {
-                  contains: search.trim(),
-                  mode: 'insensitive' as const,
-                },
-              },
-            ],
-          }
-        : {}),
+      ...(trimmed && {
+        OR: [
+          { title: { contains: trimmed, mode: 'insensitive' } },
+          { description: { contains: trimmed, mode: 'insensitive' } },
+          { location: { contains: trimmed, mode: 'insensitive' } },
+        ],
+      }),
+      ...(requiredTagSlugs.length && {
+        AND: requiredTagSlugs.map((slug) => ({
+          tags: { some: { tag: { slug } } },
+        })),
+      }),
+      ...((fromDate || toDate) && {
+        dateTime: {
+          ...(fromDate && { gte: new Date(fromDate) }),
+          ...(toDate && { lte: new Date(toDate) }),
+        },
+      }),
     };
+  }
+
+  private async validateAndResolveTagSlugs(slugs?: string[]) {
+    if (slugs === undefined) {
+      return undefined;
+    }
+
+    const normalizedSlugs = slugs.map((s) => s.trim().toLowerCase());
+
+    if (normalizedSlugs.some((s) => s.length === 0)) {
+      throw new BadRequestException('tagSlugs must contain non-empty values');
+    }
+
+    const uniqueSlugs = Array.from(new Set(normalizedSlugs));
+
+    if (uniqueSlugs.length !== normalizedSlugs.length) {
+      throw new BadRequestException('tagSlugs must be unique');
+    }
+
+    if (uniqueSlugs.length === 0) {
+      return [];
+    }
+
+    const foundTags = await this.prismaService.tag.findMany({
+      where: {
+        slug: { in: uniqueSlugs },
+        isActive: true,
+      },
+      select: { id: true, slug: true },
+    });
+
+    const foundSlugs = new Set(foundTags.map((tag) => tag.slug));
+    const missingSlugs = uniqueSlugs.filter((s) => !foundSlugs.has(s));
+
+    if (missingSlugs.length > 0) {
+      throw new BadRequestException(
+        `Unknown or inactive tagSlugs: ${missingSlugs.join(', ')}`,
+      );
+    }
+
+    return foundTags.map((tag) => tag.id);
   }
 
   async findAllPublic(query: ListEventsQueryDto, userId?: string) {
     const page = query.page ?? 1;
     const limit = query.limit ?? 10;
     const { skip, take } = getPaginationParams(page, limit);
-    const where = this.buildPublicWhereClause(query.search);
+    const where = this.buildWhereClause(query);
 
     const [items, total] = await this.prismaService.$transaction([
       this.prismaService.event.findMany({
         where,
-        select: EVENT_SUMMARY_SELECT,
+        select: EVENT_PUBLIC_LIST_SELECT,
         orderBy: { dateTime: 'asc' },
         skip,
         take,
@@ -98,17 +171,21 @@ export class EventService {
     let joinedIds = new Set<string>();
 
     if (userId && items.length > 0) {
-      const participations = await this.prismaService.participant.findMany({
-        where: { userId, eventId: { in: items.map((i) => i.id) } },
-        select: { eventId: true },
-      });
-      joinedIds = new Set(participations.map((p) => p.eventId));
+      joinedIds = await this.participantService.findJoinedEventIds(
+        userId,
+        items.map((item) => item.id),
+      );
     }
 
-    const itemsWithIsJoined = items.map((item) => ({
-      ...item,
-      isJoined: joinedIds.has(item.id),
-    }));
+    const itemsWithIsJoined = items.map((item) => {
+      const { tags, ...event } = item;
+
+      return {
+        ...event,
+        tags: tags.map(({ tag }) => tag),
+        isJoined: joinedIds.has(item.id),
+      };
+    });
 
     return buildPaginatedResult(itemsWithIsJoined, total, page, limit);
   }
@@ -116,14 +193,19 @@ export class EventService {
   async findOne(id: string) {
     const event = await this.prismaService.event.findUnique({
       where: { id },
-      select: EVENT_SELECT,
+      select: EVENT_DETAIL_SELECT,
     });
 
     if (!event) {
       throw new NotFoundException('Event not found');
     }
 
-    return event;
+    const { tags, ...rest } = event;
+
+    return {
+      ...rest,
+      tags: tags.map(({ tag }) => tag),
+    };
   }
 
   async create(userId: string, dto: CreateEventDto) {
@@ -131,32 +213,48 @@ export class EventService {
       throw new BadRequestException('Event date must be in the future');
     }
 
-    const { dateTime, ...rest } = dto;
+    const { dateTime, tagSlugs, ...rest } = dto;
+    const resolvedTagIds = await this.validateAndResolveTagSlugs(tagSlugs);
 
     return this.prismaService.event.create({
-      data: { ...rest, dateTime: new Date(dateTime), organizerId: userId },
+      data: {
+        ...rest,
+        dateTime: new Date(dateTime),
+        organizerId: userId,
+        ...(resolvedTagIds?.length && {
+          tags: { create: resolvedTagIds.map((tagId) => ({ tagId })) },
+        }),
+      },
       select: EVENT_SUMMARY_SELECT,
     });
   }
 
   async update(id: string, userId: string, dto: UpdateEventDto) {
     const event = await this.findOne(id);
+    const patch = dto as Partial<CreateEventDto>;
 
     if (event.organizerId !== userId) {
       throw new ForbiddenException('Only the organizer can edit this event');
     }
 
-    if (dto.dateTime && new Date(dto.dateTime) <= new Date()) {
+    if (patch.dateTime && new Date(patch.dateTime) <= new Date()) {
       throw new BadRequestException('Event date must be in the future');
     }
 
-    const { dateTime, ...rest } = dto;
+    const { dateTime, tagSlugs, ...rest } = patch;
+    const resolvedTagIds = await this.validateAndResolveTagSlugs(tagSlugs);
 
     return this.prismaService.event.update({
       where: { id },
       data: {
         ...rest,
         ...(dateTime && { dateTime: new Date(dateTime) }),
+        ...(resolvedTagIds !== undefined && {
+          tags: {
+            deleteMany: {},
+            create: resolvedTagIds.map((tagId) => ({ tagId })),
+          },
+        }),
       },
       select: EVENT_SUMMARY_SELECT,
     });
@@ -173,12 +271,7 @@ export class EventService {
   }
 
   async join(eventId: string, userId: string) {
-    const event = await this.findOne(eventId);
-
-    const alreadyJoined = event.participants.some((p) => p.userId === userId);
-    if (alreadyJoined) {
-      throw new ConflictException('You have already joined this event');
-    }
+    const event = await this.findEventForParticipationOrThrow(eventId);
 
     if (
       event.capacity !== null &&
@@ -187,24 +280,12 @@ export class EventService {
       throw new BadRequestException('This event is full');
     }
 
-    return this.prismaService.participant.create({
-      data: { eventId, userId },
-    });
+    return this.participantService.join(eventId, userId);
   }
 
   async leave(eventId: string, userId: string) {
-    await this.findOne(eventId);
+    await this.findEventForParticipationOrThrow(eventId);
 
-    const participant = await this.prismaService.participant.findUnique({
-      where: { userId_eventId: { userId, eventId } },
-    });
-
-    if (!participant) {
-      throw new NotFoundException('You are not a participant of this event');
-    }
-
-    await this.prismaService.participant.delete({
-      where: { userId_eventId: { userId, eventId } },
-    });
+    await this.participantService.leave(eventId, userId);
   }
 }

@@ -7,6 +7,7 @@ import {
   EventJoinButton,
   EventMeta,
   EventParticipants,
+  EventTags,
 } from '@/components/events';
 import { Button } from '@/components/ui/button';
 import {
@@ -27,6 +28,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks';
 import { getEventCapacityMeta } from '@/lib/event-capacity';
 import { getServerErrorMessage } from '@/lib/server-error';
@@ -62,7 +64,7 @@ function EventDetailsPage() {
           Failed to load event details. Please return to events list.
         </p>
         <Button asChild variant="outline">
-          <Link to="/events">Back to Events</Link>
+          <Link to={APP_ROUTES.EVENTS}>Back to Events</Link>
         </Button>
       </section>
     );
@@ -72,6 +74,7 @@ function EventDetailsPage() {
     event._count.participants,
     event.capacity,
   );
+  const tags = event.tags ?? [];
   const isOwner = user?.id === event.organizerId;
 
   const handleDelete = async () => {
@@ -79,7 +82,7 @@ function EventDetailsPage() {
       await deleteEvent(event.id).unwrap();
       setIsDeleteDialogOpen(false);
       toast.success('Event deleted successfully.');
-      navigate('/events');
+      navigate(APP_ROUTES.EVENTS);
     } catch (error) {
       toast.error(
         getServerErrorMessage(
@@ -93,7 +96,7 @@ function EventDetailsPage() {
   return (
     <section className="space-y-6">
       <Button asChild variant="ghost" className="w-fit">
-        <Link to="/events">
+        <Link to={APP_ROUTES.EVENTS}>
           <ArrowLeftIcon className="size-4" />
           Back to Events
         </Link>
@@ -108,6 +111,8 @@ function EventDetailsPage() {
         </CardHeader>
 
         <CardContent className="space-y-4">
+          <EventTags tags={tags} />
+
           <EventMeta
             dateTime={event.dateTime}
             location={event.location}
@@ -123,7 +128,7 @@ function EventDetailsPage() {
           {isOwner && (
             <>
               <Button asChild variant="outline">
-                <Link to={`/events/${event.id}/edit`}>
+                <Link to={APP_ROUTES.EVENT_EDIT(event.id)}>
                   <PencilIcon className="size-4" />
                   Edit
                 </Link>

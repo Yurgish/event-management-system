@@ -1,0 +1,35 @@
+import type { SeedUserInput } from '@prisma-seed/types';
+
+export function getSeedUsers(): SeedUserInput[] {
+  return [
+    { name: 'Olena Koval', email: 'olena@techevents.dev' },
+    { name: 'Max Tymoshenko', email: 'max@techevents.dev' },
+    { name: 'Iryna Bondar', email: 'iryna@techevents.dev' },
+    { name: 'Denys Melnyk', email: 'denys@techevents.dev' },
+    { name: 'Viktor Ostapenko', email: 'viktor@techevents.dev' },
+    { name: 'Anna Kravchenko', email: 'anna@techevents.dev' },
+    { name: 'Dmytro Savchenko', email: 'dmytro@techevents.dev' },
+    { name: 'Sofiia Rudenko', email: 'sofiia@techevents.dev' },
+    { name: 'Andriy Petrenko', email: 'andriy@techevents.dev' },
+    { name: 'Natalia Hrytsenko', email: 'natalia@techevents.dev' },
+    { name: 'Bohdan Marchenko', email: 'bohdan@techevents.dev' },
+    { name: 'Larysa Fedorenko', email: 'larysa@techevents.dev' },
+    { name: 'Kostiantyn Shevchenko', email: 'kostiantyn@techevents.dev' },
+    { name: 'Oksana Tkachenko', email: 'oksana@techevents.dev' },
+    { name: 'Taras Kovalenko', email: 'taras@techevents.dev' },
+    { name: 'Halyna Moroz', email: 'halyna@techevents.dev' },
+    { name: 'Yuriy Polishchuk', email: 'yuriy@techevents.dev' },
+    { name: 'Tetiana Karpenko', email: 'tetiana@techevents.dev' },
+    { name: 'Mykola Sydorenko', email: 'mykola@techevents.dev' },
+    { name: 'Olha Zubko', email: 'olha@techevents.dev' },
+    { name: 'Serhiy Pavlenko', email: 'serhiy@techevents.dev' },
+    { name: 'Dariya Kuznetsova', email: 'dariya@techevents.dev' },
+    { name: 'Roman Volkov', email: 'roman@techevents.dev' },
+    { name: 'Valentyna Kozak', email: 'valentyna@techevents.dev' },
+    { name: 'Vasyl Stetsenko', email: 'vasyl@techevents.dev' },
+    { name: 'Zhanna Prokopenko', email: 'zhanna@techevents.dev' },
+    { name: 'Fedir Lysenko', email: 'fedir@techevents.dev' },
+    { name: 'Milena Boychuk', email: 'milena@techevents.dev' },
+    { name: 'Yaroslav Kharchenko', email: 'yaroslav@techevents.dev' },
+  ];
+}

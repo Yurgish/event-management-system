@@ -14,6 +14,28 @@ PoC Event Management application built with:
 - `docker-compose.yml` — full stack (frontend + backend + db + pgAdmin)
 - `docker-compose.dev.yml` — dev infrastructure only (db + pgAdmin)
 
+## What's Implemented (Added)
+
+- JWT authentication: register, login, refresh, logout (refresh token in httpOnly cookie)
+- User endpoints: current profile and current user events for calendar usage
+- Event management: create, edit, delete, list public events (with pagination/search), join, leave
+- Organizer rules: event updates/deletes are organizer-only
+- Tags module: active tags endpoint and event-tag support in data model
+- AI Assistant module: authenticated streaming endpoint (`POST /assistant/ask`) with tool-calling for events/users/tags
+- Groq integration for assistant model inference (`llama-3.1-8b-instant`)
+- Frontend pages and state flow for auth, events, and assistant chat
+- Swagger API docs, Prisma migrations, and seed data for fast local testing
+
+## Environment Variables (Important)
+
+After copying `backend/.env.example` to `backend/.env`, make sure you set a real Groq key:
+
+```env
+GROQ_API_KEY="your_real_groq_api_key"
+```
+
+Without `GROQ_API_KEY`, the assistant endpoint (`/assistant/ask`) will not work.
+
 ## Quick Start — Full Docker Stack
 
 > Requires: [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -38,6 +60,8 @@ macOS/Linux:
 ```bash
 cp backend/.env.example backend/.env
 ```
+
+Then open `backend/.env` and set `GROQ_API_KEY` to your real key.
 
 3. Start everything:
 
@@ -126,6 +150,8 @@ macOS/Linux:
 ```bash
 cp backend/.env.example backend/.env
 ```
+
+Then open `backend/.env` and set `GROQ_API_KEY` to your real key.
 
 3. Generate Prisma client:
 

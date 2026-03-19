@@ -6,4 +6,6 @@ export { default as EventJoinButton } from './EventJoinButton';
 export { default as EventMeta } from './EventMeta';
 export { default as EventParticipants } from './EventParticipants';
 export { default as EventsPagination } from './EventsPagination';
+export { default as EventTags } from './EventTags';
 export { default as MoreEventsLinkContent } from './MoreEventsLinkContent';
+export { default as TagsMultiSelectCombobox } from './TagsMultiSelectCombobox';

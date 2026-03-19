@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 
 function NotFoundPage() {
   return (
@@ -11,7 +12,7 @@ function NotFoundPage() {
         The page you requested does not exist or has been moved.
       </p>
       <Button asChild>
-        <Link to="/events">Back to Events</Link>
+        <Link to={APP_ROUTES.EVENTS}>Back to Events</Link>
       </Button>
     </section>
   );

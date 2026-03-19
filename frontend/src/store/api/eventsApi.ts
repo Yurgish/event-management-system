@@ -1,3 +1,4 @@
+import { API_ENDPOINTS } from '@/constants/api-endpoints';
 import { baseApi } from '@/store/api/baseApi';
 import type {
   CreateEventRequest,
@@ -10,18 +11,43 @@ import type {
   UpdateEventRequest,
 } from '@/types/api/events';
 
+function buildListEventsQueryParams(params?: ListEventsParams | void) {
+  if (!params) {
+    return undefined;
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params.page) {
+    queryParams.set('page', String(params.page));
+  }
+
+  if (params.limit) {
+    queryParams.set('limit', String(params.limit));
+  }
+
+  if (params.search?.trim()) {
+    queryParams.set('search', params.search.trim());
+  }
+
+  for (const tagSlug of params.tags ?? []) {
+    queryParams.append('tagSlugs', tagSlug);
+  }
+
+  return queryParams;
+}
+
 export const eventsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getEvents: builder.query<PaginatedEventsResponse, ListEventsParams | void>({
-      query: (params) =>
-        params
-          ? {
-              url: '/events',
-              params,
-            }
-          : {
-              url: '/events',
-            },
+      query: (params) => {
+        const queryParams = buildListEventsQueryParams(params);
+
+        return {
+          url: API_ENDPOINTS.EVENTS,
+          ...(queryParams ? { params: queryParams } : {}),
+        };
+      },
       providesTags: (result) =>
         result
           ? [
@@ -34,12 +60,12 @@ export const eventsApi = baseApi.injectEndpoints({
           : [{ type: 'Event' as const, id: 'LIST' }],
     }),
     getEventById: builder.query<EventDetail, string>({
-      query: (id) => `/events/${id}`,
+      query: (id) => API_ENDPOINTS.EVENT_BY_ID(id),
       providesTags: (_, __, id) => [{ type: 'Event', id }],
     }),
     createEvent: builder.mutation<EventSummary, CreateEventRequest>({
       query: (body) => ({
-        url: '/events',
+        url: API_ENDPOINTS.EVENTS,
         method: 'POST',
         body,
       }),
@@ -50,7 +76,7 @@ export const eventsApi = baseApi.injectEndpoints({
       { id: string; body: UpdateEventRequest }
     >({
       query: ({ id, body }) => ({
-        url: `/events/${id}`,
+        url: API_ENDPOINTS.EVENT_BY_ID(id),
         method: 'PATCH',
         body,
       }),
@@ -62,7 +88,7 @@ export const eventsApi = baseApi.injectEndpoints({
     }),
     deleteEvent: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/events/${id}`,
+        url: API_ENDPOINTS.EVENT_BY_ID(id),
         method: 'DELETE',
       }),
       invalidatesTags: (_, __, id) => [
@@ -73,14 +99,14 @@ export const eventsApi = baseApi.injectEndpoints({
     }),
     joinEvent: builder.mutation<ParticipantRecord, string>({
       query: (id) => ({
-        url: `/events/${id}/join`,
+        url: API_ENDPOINTS.EVENT_JOIN(id),
         method: 'POST',
       }),
       invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],
     }),
     leaveEvent: builder.mutation<SuccessResponse, string>({
       query: (id) => ({
-        url: `/events/${id}/leave`,
+        url: API_ENDPOINTS.EVENT_LEAVE(id),
         method: 'POST',
       }),
       invalidatesTags: (_, __, id) => [{ type: 'Event', id }, 'MyEvents'],

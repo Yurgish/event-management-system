@@ -34,10 +34,10 @@ export class UserController {
   @Auth()
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Get current user events (organized + joined) for calendar',
+    summary: 'Get current user events for calendar',
   })
   @ApiOkResponse({
-    description: 'Object with organizedEvents and participations arrays.',
+    description: 'Object with a single events array.',
     type: MyEventsResponseDto,
   })
   @ApiNotFoundResponse({ description: 'User not found' })

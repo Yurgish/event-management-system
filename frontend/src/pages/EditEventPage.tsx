@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import { EventForm } from '@/components/events';
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 import {
   buildEventRequest,
   type EventFormValues,
@@ -43,7 +44,7 @@ function EditEventPage() {
           Failed to load event for editing. Try opening it again.
         </p>
         <Button asChild variant="outline">
-          <Link to="/my-events">Back to My Events</Link>
+          <Link to={APP_ROUTES.MY_EVENTS}>Back to My Events</Link>
         </Button>
       </section>
     );
@@ -57,7 +58,7 @@ function EditEventPage() {
       }).unwrap();
 
       toast.success('Event updated successfully');
-      navigate(`/events/${id}`);
+      navigate(APP_ROUTES.EVENT_DETAILS(id));
     } catch (error) {
       toast.error(
         getServerErrorMessage(
@@ -71,7 +72,7 @@ function EditEventPage() {
   return (
     <section className="mx-auto flex min-h-[calc(100vh-7rem)] max-w-lg flex-col justify-center gap-3">
       <Button asChild variant="ghost" className="w-fit">
-        <Link to={`/events/${id}`}>
+        <Link to={APP_ROUTES.EVENT_DETAILS(id)}>
           <ArrowLeftIcon className="size-4" />
           Back to Event
         </Link>

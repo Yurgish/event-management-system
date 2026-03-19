@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import EventJoinButton from '@/components/events/EventJoinButton';
+import EventTags from '@/components/events/EventTags';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { APP_ROUTES } from '@/constants/routes';
 import { getEventCapacityMeta } from '@/lib/event-capacity';
 import type { EventSummary } from '@/types/api/events';
 
@@ -36,6 +38,7 @@ function toDescriptionPreview(description: string) {
 }
 
 function EventCard({ event, isJoined }: EventCardProps) {
+  const tags = event.tags ?? [];
   const [joinedState, setJoinedState] = useState(isJoined);
   const [participantsCount, setParticipantsCount] = useState(
     event._count.participants,
@@ -78,10 +81,11 @@ function EventCard({ event, isJoined }: EventCardProps) {
           <CardDescription className="text-sm">
             {descriptionPreview}
           </CardDescription>
+          <EventTags tags={tags} className="pt-1" />
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-2 text-sm">
+      <CardContent className="flex flex-wrap justify-between space-y-2 text-sm">
         <p className="text-muted-foreground flex items-center gap-2">
           <CalendarClockIcon className="size-4" />
           {new Date(event.dateTime).toLocaleString()}
@@ -104,7 +108,7 @@ function EventCard({ event, isJoined }: EventCardProps) {
 
       <CardFooter className="mt-auto flex gap-2">
         <Button asChild variant="outline" className="flex-1">
-          <Link to={`/events/${event.id}`}>Details</Link>
+          <Link to={APP_ROUTES.EVENT_DETAILS(event.id)}>Details</Link>
         </Button>
 
         <EventJoinButton

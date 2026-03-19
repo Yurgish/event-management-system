@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { APP_ROUTES } from '@/constants/routes';
 
 interface DayEventsDialogProps {
   open: boolean;
@@ -38,7 +39,12 @@ function DayEventsDialog({
               | 'organized'
               | 'joined'
               | undefined;
-            const isOrganized = source === 'organized';
+            const eventTypeLabel =
+              source === 'organized' ? 'Your event' : 'You joined';
+            const tagColor =
+              (typeof event.backgroundColor === 'string' &&
+                event.backgroundColor) ||
+              '#64748b';
             const time = event.start
               ? new Date(event.start).toLocaleTimeString(undefined, {
                   hour: '2-digit',
@@ -50,25 +56,24 @@ function DayEventsDialog({
             return (
               <Link
                 key={event.id}
-                to={eventId ? `/events/${eventId}` : '#'}
+                to={eventId ? APP_ROUTES.EVENT_DETAILS(eventId) : '#'}
                 className="hover:bg-accent flex w-full min-w-0 items-center gap-3 rounded-lg border px-3 py-2 text-left text-sm transition-colors sm:px-3 sm:py-2.5"
                 onClick={() => onOpenChange(false)}
               >
                 <span
                   className="size-2 shrink-0 rounded-full"
                   style={{
-                    backgroundColor: isOrganized ? '#059669' : '#0284c7',
+                    backgroundColor: tagColor,
                   }}
                 />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-medium">
                     {event.title}
                   </span>
-                  {time && (
-                    <span className="text-muted-foreground text-xs">
-                      {time}
-                    </span>
-                  )}
+                  <span className="text-muted-foreground block text-xs">
+                    {eventTypeLabel}
+                    {time ? ` • ${time}` : ''}
+                  </span>
                 </span>
               </Link>
             );

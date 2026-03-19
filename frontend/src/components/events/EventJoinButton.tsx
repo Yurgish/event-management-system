@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { APP_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks';
 import { getServerErrorMessage } from '@/lib/server-error';
 import { cn } from '@/lib/utils';
@@ -41,7 +42,7 @@ function EventJoinButton({
   const handleClick = async () => {
     if (!isAuthenticated) {
       toast.info('Please log in to join events.');
-      navigate('/login', {
+      navigate(APP_ROUTES.LOGIN, {
         state: { from: `${location.pathname}${location.search}` },
       });
       return;
